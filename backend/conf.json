@@ -1,0 +1,10 @@
+{
+    "port": 5500,
+    "connection": {
+        "SQL_user": "sa",
+        "SQL_password": "S0p0rt3",
+        "SQL_server": "189.204.141.193",
+        "SQL_database": "Partidas",
+        "SQL_connectionTimeout": 70000
+    }
+}
