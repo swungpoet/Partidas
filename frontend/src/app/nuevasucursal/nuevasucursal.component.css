@@ -1,0 +1,59 @@
+ .sebm-google-map-container {
+      height: 300px;
+    }
+.mapContainer{
+    padding-left: 0;
+    padding-right: 10px;
+}
+
+.divisor{
+    border-left: 1px solid gainsboro !important;
+    background-color: #f3f3f3;
+}
+
+.long-title h3 {
+    font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
+    font-weight: 200;
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.fotoUnidad{
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.fotoContent{
+    width: 100% !important;
+    text-align: center !important;
+}
+
+.deleteLink{
+    color: #a00404 !important;
+    cursor: pointer;
+}
+
+.instructivo{
+    cursor: pointer;
+}
+
+.dx-tile-content .price {
+    font-size: 12px;
+    position: absolute;
+    background-color: black;
+    color: white;
+    opacity: 0.6;
+    padding: 2px;
+    left: 9px;
+    top: 9px;
+}
+
+.dx-tile-content .image {
+    height: 80%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    padding: 10px;
+    display: block;
+}

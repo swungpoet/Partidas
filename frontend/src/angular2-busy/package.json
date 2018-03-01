@@ -1,0 +1,145 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "angular2-busy",
+        "scope": null,
+        "escapedName": "angular2-busy",
+        "name": "angular2-busy",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/edwin/Documents/CodeKit/partidas/frontend"
+    ]
+  ],
+  "_from": "angular2-busy@latest",
+  "_id": "angular2-busy@2.0.4",
+  "_inCache": true,
+  "_location": "/angular2-busy",
+  "_nodeVersion": "6.0.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/angular2-busy-2.0.4.tgz_1492581479974_0.035179023165255785"
+  },
+  "_npmUser": {
+    "name": "devyumao",
+    "email": "yuzhang.lille@gmail.com"
+  },
+  "_npmVersion": "3.8.6",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "angular2-busy",
+    "scope": null,
+    "escapedName": "angular2-busy",
+    "name": "angular2-busy",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/angular2-busy/-/angular2-busy-2.0.4.tgz",
+  "_shasum": "82e4b1fbbcaf97bcfac09d237489cfe9e8c4b9f3",
+  "_shrinkwrap": null,
+  "_spec": "angular2-busy",
+  "_where": "/Users/edwin/Documents/CodeKit/partidas/frontend",
+  "author": {
+    "name": "Yumao"
+  },
+  "bugs": {
+    "url": "https://github.com/devyumao/angular2-busy"
+  },
+  "dependencies": {},
+  "description": "Angular 2 Busy: show busy/loading indicators on any promise, or on any Observable's subscription",
+  "devDependencies": {
+    "@angular/animations": "^4.0.1",
+    "@angular/common": "^4.0.1",
+    "@angular/compiler": "^4.0.1",
+    "@angular/compiler-cli": "^4.0.1",
+    "@angular/core": "^4.0.1",
+    "@angular/forms": "^4.0.1",
+    "@angular/http": "^4.0.1",
+    "@angular/platform-browser": "^4.0.1",
+    "@angular/platform-browser-dynamic": "^4.0.1",
+    "@angular/router": "^4.0.1",
+    "@types/core-js": "^0.9.41",
+    "autoprefixer": "^6.3.7",
+    "awesome-typescript-loader": "^0.19.1",
+    "bootstrap": "^4.0.0-alpha.2",
+    "compression-webpack-plugin": "^0.3.2",
+    "copy-webpack-plugin": "^3.0.1",
+    "core-js": "^2.4.1",
+    "cross-env": "^3.2.3",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "html-webpack-plugin": "^2.28.0",
+    "install": "^0.8.7",
+    "jasmine-core": "^2.4.1",
+    "less": "^2.7.2",
+    "less-loader": "^2.2.3",
+    "postcss-loader": "^0.9.1",
+    "raw-loader": "^0.5.1",
+    "reflect-metadata": "^0.1.3",
+    "rxjs": "~5.1.1",
+    "ts-loader": "^0.8.2",
+    "tslint": "~4.5.0",
+    "typescript": "~2.2.0",
+    "typings": "^0.8.1",
+    "webpack": "^1.12.15",
+    "webpack-dev-server": "^1.14.1",
+    "zone.js": "^0.8.5"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "82e4b1fbbcaf97bcfac09d237489cfe9e8c4b9f3",
+    "tarball": "https://registry.npmjs.org/angular2-busy/-/angular2-busy-2.0.4.tgz"
+  },
+  "gitHead": "707d8c74c6a58191370374d82ad99a52cec3e611",
+  "homepage": "https://github.com/devyumao/angular2-busy",
+  "keywords": [
+    "angular",
+    "angular2",
+    "busy",
+    "loading",
+    "angular2-busy",
+    "ng2-busy"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "devyumao",
+      "email": "yuzhang.lille@gmail.com"
+    }
+  ],
+  "name": "angular2-busy",
+  "optionalDependencies": {},
+  "peerDependencies": {
+    "@angular/animations": "^4.0.0",
+    "@angular/common": "^4.0.0",
+    "@angular/core": "^4.0.0",
+    "@angular/platform-browser": "^4.0.0",
+    "rxjs": "^5.0.0"
+  },
+  "readme": "# Angular2-Busy\n\n[![npm version](https://img.shields.io/npm/v/angular2-busy.svg?style=flat-square)](https://www.npmjs.com/package/angular2-busy) [![Build Status](https://img.shields.io/travis/devyumao/angular2-busy/master.svg?style=flat-square)](https://travis-ci.org/devyumao/angular2-busy)\n\n**Angular 2 Busy** can show busy/loading indicators on any promise, or on any Observable's subscription.\n\n![demo](https://raw.githubusercontent.com/devyumao/devyumao.github.io/master/angular2-busy/img/demo.gif)\n\nRewritten from [angular-busy](https://github.com/cgross/angular-busy), and add some new features in terms of Angular 2.\n\n### Built with Angular 4.0.1\n\n## Demo\n\n[devyumao.github.io/angular2-busy/demo/asset/](http://devyumao.github.io/angular2-busy/demo/asset/)\n\n## Installation\n\n```shell\nnpm install --save angular2-busy\n```\n\n## Link CSS\n\n```html\n<link rel=\"stylesheet\" href=\"/node_modules/angular2-busy/build/style/busy.css\">\n```\n\n## Getting Started\n\nImport the `BusyModule` in your root application module:\n\n```typescript\nimport {NgModule} from '@angular/core';\nimport {BrowserAnimationsModule} from '@angular/platform-browser/animations';\nimport {BusyModule} from 'angular2-busy';\n\n@NgModule({\n\timports: [\n    \t// ...\n        BrowserAnimationsModule,\n        BusyModule\n    ],\n\t// ...\n})\nexport class AppModule {}\n```\n\n\nReference your promise in the `ngBusy` directive:\n\n```typescript\nimport {Component, OnInit} from '@angular/core';\nimport {Http} from '@angular/http';\n\n@Component({\n    selector: 'some',\n    template: `\n        <div [ngBusy]=\"busy\"></div>\n    `\n})\nclass SomeComponent implements OnInit {\n    busy: Promise<any>;\n\n    constructor(private http: Http) {}\n\n    ngOnInit() {\n        this.busy = this.http.get('...').toPromise();\n    }\n}\n```\n\nMoreover, the subscription of an Observable is also supported:\n\n```typescript\n// ...\nimport {Subscription} from 'rxjs';\n\n// ...\nclass SomeComponent implements OnInit {\n    busy: Subscription;\n\n    // ...\n\n    ngOnInit() {\n        this.busy = this.http.get('...').subscribe();\n    }\n}\n```\n\n## Directive Syntax\n\nThe `ngBusy` directive expects a ***busy thing***, which means:\n- A promise\n- Or an Observable's subscription\n- Or an array of them\n- Or a configuration object\n\nIn other words, you may use flexible syntax:\n\n```html\n<!-- Simple syntax -->\n<div [ngBusy]=\"busy\"></div>\n```\n\n```html\n<!-- Collection syntax -->\n<div [ngBusy]=\"[busyA, busyB, busyC]\"></div>\n```\n\n```html\n<!-- Advanced syntax -->\n<div [ngBusy]=\"{busy: busy, message: 'Loading...', backdrop: false, delay: 200, minDuration: 600}\"></div>\n```\n\n## Options\n\n| Option | Required | Default | Details |\n| ---- | ---- | ---- | ---- |\n| busy | Required | null | A busy thing (or an array of busy things) that will cause the loading indicator to show. |\n| message | Optional | 'Please wait...' | The message to show in the indicator which will reflect the updated values as they are changed. |\n| backdrop | Optional | true | A faded backdrop will be shown behind the indicator if true. |\n| template | Optional | A default template string | If provided, the custom template will be shown in place of the default indicatory template. The scope can be augmented with a `{{message}}` field containing the indicator message text. |\n| delay | Optional | 0 | The amount of time to wait until showing the indicator. Specified in milliseconds.\n| minDuration | Optional | 0 | The amount of time to keep the indicator showing even if the busy thing was completed quicker. Specified in milliseconds.|\n| wrapperClass | Optional | 'ng-busy' | The name(s) of the CSS classes to be applied to the wrapper element of the indicator. |\n\n\n## Overriding Defaults\n\nThe default values of options can be overriden by configuring the provider of the `BusyModule`.\n\nIn the root application module, you can do this:\n\n```typescript\nimport {NgModule} from '@angular/core';\nimport {BusyModule, BusyConfig} from 'angular2-busy';\n\n@NgModule({\n    imports: [\n    \t// ...\n        BusyModule.forRoot(\n        \tnew BusyConfig({\n            \tmessage: 'Don\\'t panic!',\n                backdrop: false,\n                template: '<div>{{message}}</div>',\n                delay: 200,\n                minDuration: 600,\n                wrapperClass: 'my-class'\n            })\n        )\n    ],\n\t// ...\n})\nexport class AppModule\n```\n\n## FAQ\n\n### The indicator's position is not inside the `ngBusy` container\n\nYou may add `position: relative` style to your `ngBusy` container.\n\n### SystemJS Config?\n\nYou may need this in your `systemjs.config.js`:\n\n```javascript\n{\n    paths: {\n        'npm:': 'node_modules/'\n    },\n    map: {\n        // ...\n        'angular2-busy': 'npm:angular2-busy'\n    },\n    packages: {\n        // ...\n        'angular2-busy': {\n            main: './index.js',\n            defaultExtension: 'js'\n        }\n    }\n}\n```\n\n\n## TODO\n\n- Provide custom animations for the indicator\n\n- Unit & E2E test\n\n## Credits\n\nRewritten from [cgross](https://github.com/cgross)'s [angular-busy](https://github.com/cgross/angular-busy).\n\nInspired by [ajoslin](https://github.com/ajoslin)'s [angular-promise-tracker](https://github.com/ajoslin/angular-promise-tracker).\n\n## LICENSE\n\nThis project is licensed under the MIT license. See the [LICENSE](https://github.com/devyumao/angular2-busy/blob/master/LICENSE) file for more info.\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devyumao/angular2-busy.git"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=busy webpack --progress",
+    "build:busy": "npm run build",
+    "build:demo": "cross-env NODE_ENV=demo webpack --progress",
+    "ngc": "ngc",
+    "test": "cross-env NODE_ENV=test webpack --inline --progress --colors --watch --content-base test",
+    "tsc": "tsc",
+    "watch": "cross-env NODE_ENV=busy webpack --inline --progress --profile --colors --watch --display-error-details --display-cached --content-base build",
+    "watch:busy": "npm run watch",
+    "watch:demo": "cross-env NODE_ENV=demo webpack-dev-server --inline --progress --profile --colors --watch --display-error-details --display-cached --content-base demo/asset"
+  },
+  "typings": "",
+  "version": "2.0.4"
+}

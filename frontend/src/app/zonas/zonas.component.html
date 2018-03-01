@@ -1,0 +1,174 @@
+<div id="page-title">
+    <h1 class="page-header text-overflow">Zonas</h1>
+</div>
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Administrar zonas por cliente</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12 pull-left">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Seleccione un cliente</label>
+                        <div class="col-md-5">
+                            <p-dropdown [options]="clientesDDL" [(ngModel)]="selectedCliente" placeholder="Seleccione un cliente" (onChange)="setCliente()"
+                                [filter]="true" [style]="{'width':'400px'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row" *ngIf=" selectedCliente != null">
+                <div class="col-xs-12">
+                    <!--<button #btnOpenZona class="btn btn-primary btn-labeled fa fa-plus pull-right" (click)="mdNivel.open()">Administrar Zonas</button>-->
+                    <button #btnOpenDireccion type="button" class="btn btn-warning btn-labeled fa fa-plus pull-right" *ngIf="showDireccion"> Dirección</button>
+                    <button #btnOpenNivel class="btn btn-info btn-labeled fa fa-plus pull-right" (click)="mdNivel.open()">Administrar Niveles</button>
+                </div>
+            </div>
+            <br>
+            <div class="row" *ngIf=" selectedCliente != null">
+                <div class="col-xs-12">
+                    <p-tree [value]="files" layout="horizontal" selectionMode="single" expanded="true" [(selection)]="selectedFile" (onNodeSelect)="nodeSelected($event)"></p-tree>
+                    <div style="margin-top:8px">Nodo seleccionado: {{selectedFile ? selectedFile.label : 'none'}}</div>
+                </div>
+            </div>
+            <br>
+            <hr>
+            <div class="row" *ngIf=" selectedFile != null">
+                <div class="col-sm-6"></div>
+                <div class="col-sm-6">
+                    <form class="form-horizontal" [formGroup]="frmZona" (ngSubmit)="save(frmZona.value);">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Zona Padre</label>
+                                <label class="col-sm-7 control-label labelZona">{{selectedFile ? selectedFile.label : 'none'}}</label>
+                                <button type="button" class="btn btn-danger col-sm-2" (click)="eliminar()" > Eliminar</button>
+                            </div>
+                            <div class="form-group" [ngClass]="{'has-error':!frmZona.controls['nombre'].valid && frmZona.controls['nombre'].touched}">
+                                <label class="col-sm-3 control-label">Nueva Zona</label>
+                                <div class="col-sm-9">
+                                    <input type="text" placeholder="Nombre de zona hija" class="form-control" [formControl]="frmZona.controls['nombre']">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button class="btn btn-primary" type="submit" [disabled]="!frmZona.valid">Agregar Zona</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<p-confirmDialog header="Alerta" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>
+
+<modal #mdNivel title="Nuevo Nivel" [hideCloseButton]="false" [closeOnEscape]="false" [closeOnOutsideClick]="false" (onOpen)="onOpenNivel()">
+    <modal-content>
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="form-horizontal" [formGroup]="frmNivel" (ngSubmit)="saveNivel(frmNivel.value);">
+                    <div class="panel-body">
+                        <div class="form-group" [ngClass]="{'has-error':!frmNivel.controls['etiqueta'].valid && frmNivel.controls['etiqueta'].touched}">
+                            <label class="col-sm-3 control-label">Nivel</label>
+                            <div class="col-sm-9">
+                                <input type="text" placeholder="Ingrese un nivel" class="form-control" [formControl]="frmNivel.controls['etiqueta']">
+                                <div class="alert alert-danger" *ngIf="!frmNivel.controls['etiqueta'].valid && frmNivel.controls['etiqueta'].touched">Debe introducir un nivel.</div>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error':!frmNivel.controls['orden'].valid && frmNivel.controls['orden'].touched}">
+                            <label class="col-sm-3 control-label">Orden</label>
+                            <div class="col-sm-2">
+                                <input type="number" placeholder="orden" class="form-control" [formControl]="frmNivel.controls['orden']">
+                                <!--<div class="alert alert-danger" *ngIf="!frmNivel.controls['orden'].valid && frmNivel.controls['orden'].touched">Debe introducir un orden.</div>-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button #btnCloseNivel class="btn btn-default" type="button" (click)="mdNivel.close(); frmNivel.reset();">Cancelar</button>
+                        <button class="btn btn-primary" type="submit" *ngIf="frmNivel.controls['idNivelZona'].value == null" [disabled]="!frmNivel.valid">Agregar Nivel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <p-dataTable [value]="niveles" [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" sortMode="multiple"
+                resizableColumns="true" reorderableColumns="true" [responsive]="true" #dt>
+                <p-column *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+                <p-column styleClass="col-button">
+                    <ng-template pTemplate="header">
+                        Eliminar
+                    </ng-template>
+                    <ng-template let-niv="rowData" pTemplate="body">
+                        <button class="btn btn-default btn-icon btn-circle" (click)="eliminarNivel(niv)" pTooltip="Eliminar" tooltipEvent="focus"
+                            tooltipPosition="top"><i class="fa fa-trash-o"></i></button>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+
+    </modal-content>
+</modal>
+
+<!--
+<modal #myModal title="Nuevo Cliente" [hideCloseButton]="false" [closeOnEscape]="false" [closeOnOutsideClick]="false" (onOpen)="onOpenModal()">
+    <modal-content>
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="form-horizontal" [formGroup]="frmClientes" (ngSubmit)="save(frmClientes.value);">
+                    <div class="panel-body">
+                        <div class="form-group" [ngClass]="{'has-error':!frmClientes.controls['nombreComercial'].valid && frmClientes.controls['nombreComercial'].touched}">
+                            <label class="col-sm-3 control-label">Nombre Comercial</label>
+                            <div class="col-sm-9">
+                                <input type="text" placeholder="Ingrese un nombre comercial" class="form-control" [formControl]="frmClientes.controls['nombreComercial']">
+                                <div class="alert alert-danger" *ngIf="!frmClientes.controls['nombreComercial'].valid && frmClientes.controls['nombreComercial'].touched">Debe introducir un nombre comercial.</div>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error':!frmClientes.controls['razonSocial'].valid && frmClientes.controls['razonSocial'].touched}">
+                            <label class="col-sm-3 control-label">Razón Social</label>
+                            <div class="col-sm-9">
+                                <input type="text" placeholder="Ingrese la razón social" class="form-control" [formControl]="frmClientes.controls['razonSocial']">
+                                <div class="alert alert-danger" *ngIf="!frmClientes.controls['razonSocial'].valid && frmClientes.controls['razonSocial'].touched">Debe introducir una razon social.</div>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error':!frmClientes.controls['rfc'].valid && frmClientes.controls['rfc'].touched}">
+                            <label class="col-sm-3 control-label">RFC</label>
+                            <div class="col-sm-9">
+                                <input type="text" placeholder="Ingrese un RFC" class="form-control" [formControl]="frmClientes.controls['rfc']">
+                                <div class="alert alert-danger" *ngIf="!frmClientes.controls['rfc'].valid && frmClientes.controls['rfc'].touched">Debe Introducir un RFC.</div>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error':!frmClientes.controls['direccion'].valid && frmClientes.controls['direccion'].touched}">
+                            <label class="col-sm-3 control-label">Dirección</label>
+                            <div class="col-sm-9">
+                                <textarea rows="2" placeholder="Ingrese una dirección" class="form-control" [formControl]="frmClientes.controls['direccion']"> </textarea>
+                                <div class="alert alert-danger" *ngIf="!frmClientes.controls['direccion'].valid && frmClientes.controls['direccion'].touched">Debe introducir una dirección.</div>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error':!frmClientes.controls['telefono'].valid && frmClientes.controls['telefono'].touched}">
+                            <label class="col-sm-3 control-label">Teléfono</label>
+                            <div class="col-sm-9">
+                                <input type="number" placeholder="Ingrese un teléfono" class="form-control" [formControl]="frmClientes.controls['telefono']">
+                                <div class="alert alert-danger" *ngIf="!frmClientes.controls['telefono'].valid && frmClientes.controls['telefono'].touched">Debe introducir un teléfono.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button #btnClose class="btn btn-default" type="button" (click)="myModal.close(); frmClientes.reset();">Cancelar</button>
+                        <button class="btn btn-primary" type="submit" *ngIf="frmClientes.controls['idCliente'].value == null" [disabled]="!frmClientes.valid">Agregar Cliente</button>
+                        <button class="btn btn-warning" type="submit" *ngIf="frmClientes.controls['idCliente'].value != null" [disabled]="!frmClientes.valid">Actualizar Cliente</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </modal-content>
+</modal>
+-->

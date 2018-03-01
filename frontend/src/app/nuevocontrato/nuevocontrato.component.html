@@ -1,0 +1,120 @@
+<div id="page-title">
+    <h1 class="page-header text-overflow">Nuevo Contrato</h1>
+</div>
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+    <form class="panel-body form-horizontal form-padding" [formGroup]="frmContrato" (ngSubmit)="save(frmContrato.value);">
+        <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Introduzca todos los datos y de clic en generar:</h3>
+            </div>
+            <div class="panel-body">
+                <br>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="demo-text-input">No. Contrato</label>
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" [formControl]="frmContrato.controls['numero']">
+                        <small class="help-block">Número o folio del contrato</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="demo-textarea-input">Descripción</label>
+                    <div class="col-md-9">
+                        <textarea [formControl]="frmContrato.controls['descripcion']" rows="2" class="form-control"></textarea>
+                        <small class="help-block">Descripción breve del objeto del contrato</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="demo-text-input">Fecha de Inicio</label>
+                    <div class="col-md-9">
+                        <p-calendar [formControl]="frmContrato.controls['fechaInicio']" dateFormat="mm-dd-yy" [showIcon]="true"></p-calendar>
+                        <small class="help-block">Fecha en la que comienza la vigencia del contrato</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Fecha de Término</label>
+                    <div class="col-md-9">
+                        <p-calendar [formControl]="frmContrato.controls['fechaFin']" dateFormat="mm-dd-yy" [showIcon]="true"></p-calendar>
+                        <small class="help-block">Fecha de término</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Seleccione la licitación</label>
+                    <div class="col-md-9">
+                        <p-dropdown [options]="licitacionesDDL" [disabled]="isDisabled" [formControl]="frmContrato.controls['idLicitacion']" placeholder="Seleccione una licitación" [filter]="true" [style]="{'width':'450px'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <br>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Activo</label>
+                    <div class="col-md-9">
+                        <p-checkbox [(ngModel)]="checked" [ngModelOptions]="{standalone: true}" binary="true"></p-checkbox>
+                    </div>
+                </div>
+                <br>
+                <!-- <div class="form-group">
+                    <label class="col-md-3 control-label">Seleccione las unidades</label>
+                    <div class="col-md-10 col-md-offset-1">
+                        <p-pickList [source]="unidades" [target]="selectedUnidades" sourceHeader="Disponibles" targetHeader="Seleccionadas" [responsive]="true" [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
+                            <ng-template let-car pTemplate="item">
+                                <div class="ui-helper-clearfix">
+                                    <div class="itemTipo">{{car.tipoUnidad}}</div>
+                                    <div class="itemMarca">{{car.marca}} {{car.subMarca}} - {{car.anio}} </div>
+                                    <div class="itemMarca"> / ({{car.listasPrecio}} listas de precios) </div>
+                                    <div class="itemModelo"> {{car.version}} </div>
+                                </div>
+                            </ng-template>
+                        </p-pickList>
+                    </div>
+                    <label class="col-md-9 control-label text-danger">Por control interno, no es posible eliminar Unidades del contrato, para ello consulte con el Administrador del Sistema.</label>
+                </div> -->
+
+                <div class="form-group" *ngIf="idUsuario == 19 || idUsuario == 1 || idUsuario == 44 || idUsuario == 45 || idUsuario == 38 || idUsuario == 39">
+                    <label class="col-md-3 control-label">Seleccione las unidades</label>
+                    <div class="col-md-10 col-md-offset-1">
+                        <p-listbox [options]="unidades" [(ngModel)]="selectedUnidades" [ngModelOptions]="{standalone: true}" multiple="multiple" checkbox="checkbox" filter="filter" [style]="{'width': '100%', 'height':'200px'}">
+
+                        </p-listbox>
+                    </div>
+                    <label class="col-md-9 control-label text-danger">Por control interno, no es posible eliminar Unidades del contrato, para ello consulte con el Administrador del Sistema.</label>
+                </div>
+
+                <br>
+                <!-- <div class="form-group">
+                    <label class="col-md-3 control-label">Seleccione los proveedores</label>
+                    <div class="col-md-10 col-md-offset-1">
+                        <p-pickList [source]="proveedores" [target]="selectedProveedores" sourceHeader="Disponibles" targetHeader="Seleccionados" [responsive]="true" [sourceStyle]="{'height':'300px'}" [targetStyle]="{'height':'300px'}">
+                            <ng-template let-pro pTemplate="item">
+                                <div class="ui-helper-clearfix">
+                                    <div class="itemTipo">{{pro.especialidades}}</div>
+                                    <div class="itemMarca">{{pro.nombreComercial}} - {{pro.razonSocial}} / RFC {{pro.RFC}} </div>
+                                    <div class="itemModelo"> {{pro.tipoUnidad}} </div>
+                                </div>
+                            </ng-template>
+                        </p-pickList>
+                    </div>
+                    <label class="col-md-9 control-label text-danger">Por control interno, no es posible eliminar Proveedores del contrato, para ello consulte con el Administrador del Sistema.</label>
+                </div> -->
+
+                <div class="form-group" *ngIf="idUsuario == 50 || idUsuario == 1 || idUsuario == 44 || idUsuario == 45 || idUsuario == 51">
+                    <label class="col-md-3 control-label">Seleccione los proveedores</label>
+                    <div class="col-md-10 col-md-offset-1">
+                        <p-listbox [options]="proveedores" [(ngModel)]="selectedProveedores" [ngModelOptions]="{standalone: true}" multiple="multiple" checkbox="checkbox" filter="filter" [style]="{'width': '100%', 'height':'200px'}">
+
+                        </p-listbox>
+                    </div>
+                    <label class="col-md-9 control-label text-danger">Por control interno, no es posible eliminar Proveedores del contrato, para ello consulte con el Administrador del Sistema.</label>
+                </div>
+
+
+            </div>
+            <div class="panel-footer text-right">
+                <button class="btn btn-success" type="submit" [disabled]="!frmContrato.valid">Guardar Contrato</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<p-confirmDialog header="Alerta" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>

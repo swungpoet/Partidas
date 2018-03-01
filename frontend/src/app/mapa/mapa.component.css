@@ -1,0 +1,27 @@
+ .sebm-google-map-container {
+      height: 900px;
+    }
+.mapContainer{
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+#tasks {
+    min-height: 400px;
+    max-height: 400px;
+    width: 90%;
+}
+
+#tasks .dx-treelist-rowsview td {
+    vertical-align: middle;
+}
+
+.name {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.linkProveedor
+{
+    color: blue;
+}

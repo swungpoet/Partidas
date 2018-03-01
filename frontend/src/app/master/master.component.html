@@ -1,0 +1,158 @@
+<div id="container" class="effect aside-float aside-bright mainnav-lg">
+  <header id="navbar">
+    <div id="navbar-container" class="boxed">
+      <div class="navbar-header" *ngIf="router.url != '/' &&  !router.url.includes('/alta') ">
+        <a href="index.html" class="navbar-brand">
+          <!--<img src="img/logo.png" alt="Nifty Logo" class="brand-icon">-->
+          <div class="brand-title">
+            <span class="brand-text"> &nbsp; &nbsp; Proveedores </span>
+          </div>
+        </a>
+      </div>
+      <div class="navbar-content clearfix" *ngIf="router.url != '/' &&  !router.url.includes('/alta') ">
+        <ul class="nav navbar-top-links pull-left">
+          <li class="tgl-menu-btn">
+            <a class="mainnav-toggle" href="#">
+                <i class="demo-pli-view-list"></i>
+              </a>
+          </li>
+        </ul>
+        <ul class="nav navbar-top-links pull-right">
+          <li id="dropdown-user" class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle text-right">
+                <span class="pull-right">
+                  <i class="demo-pli-male ic-user"></i>
+                </span>
+                <div class="username hidden-xs">{{ user.nombre }}</div>
+              </a>
+            <div class="dropdown-menu dropdown-menu-md dropdown-menu-right panel-default">
+              <div class="pad-all text-right">
+                <a (click)="CerrarSesion()" class="btn btn-primary">
+                    <i class="demo-pli-unlock"></i> Cerrar Sesión
+                  </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <div class="boxed">
+    <div id="content-container" [ngClass]="{ 'centrado': router.url == '/' ||  router.url.includes('/alta')  }">
+      <init-component>
+        Cargando...
+      </init-component>
+    </div>
+    <nav id="mainnav-container" *ngIf=" router.url != '/' &&  !router.url.includes('/alta')  ">
+      <div id="mainnav">
+        <div id="mainnav-menu-wrap">
+          <div class="nano">
+            <div class="nano-content">
+              <ul id="mainnav-menu" class="list-group">
+                <li class="list-header" *ngIf = "user.idPerfil!=2">Catálogos</li>
+                <li *ngIf = "user.idPerfil!=2">
+                  <a routerLink="/clientes">
+                      <i class="fa fa-briefcase"></i>
+                      <span class="menu-title">
+												<strong>Clientes</strong>
+											</span>
+                    </a>
+                </li>
+                <li *ngIf = "user.idPerfil!=2">
+                  <a routerLink="/zonas">
+                      <i class="fa fa-map-o"></i>
+                      <span class="menu-title">
+												<strong>Zonas</strong>
+											</span>
+                    </a>
+                </li>
+                <li *ngIf = "user.idPerfil!=2">
+                  <a routerLink="/licitaciones">
+                      <i class=" fa fa-building"></i>
+                      <span class="menu-title">
+												<strong>Licitaciones</strong>
+											</span>
+                    </a>
+                </li>
+                <li *ngIf = "user.idPerfil!=2">
+                  <a routerLink="/proveedores">
+                      <i class="fa fa-users"></i>
+                      <span class="menu-title">
+												<strong>Proveedores</strong>
+											
+                      </span>
+                    </a>
+                </li>
+                <li *ngIf = "user.idPerfil!=2">
+                  <a routerLink="/mapa">
+                      <i class="fa fa-globe"></i>
+                      <span class="menu-title">
+												<strong>Mapa</strong>
+                      </span>
+                    </a>
+                </li>
+                <li *ngIf = "user.idPerfil!=2">
+                  <a routerLink="/unidades">
+                      <i class="fa fa-truck"></i>
+                      <span class="menu-title">
+												<strong>Tipos de Unidades</strong>
+                      </span>
+                    </a>
+                </li>
+                <li *ngIf = "user.idPerfil!=2">
+                  <a routerLink="/partidas">
+                      <i class="fa fa-cogs"></i>
+                      <span class="menu-title">
+												<strong>Partidas</strong>
+                      </span>
+                    </a>
+                </li>
+                <li class="list-divider"></li>
+                <li class="list-header">Costos</li>
+                <li *ngIf = "user.idPerfil!=2">
+                  <a routerLink="/cotizacion">
+                      <i class="fa fa-usd"></i>
+                      <span class="menu-title">
+												<strong> Costo de Partidas</strong>
+                      </span>
+                    </a>
+                </li>
+                <li>
+                  <a routerLink="/cotizar">
+                      <i class="fa fa-usd"></i>
+                      <span class="menu-title">
+												<strong>Cotizar</strong>
+                      </span>
+                    </a>
+                </li>
+                <li class="list-divider"></li>
+                <li class="list-header" *ngIf = "user.idPerfil!=2">Contratos</li>
+                <li *ngIf = "user.idPerfil!=2">
+                  <a routerLink="/contratos">
+                      <i class="fa fa-file-text-o"></i>
+                      <span class="menu-title">
+												<strong>Contratos</strong>
+                      </span>
+                    </a>
+                </li>
+                <li class="list-divider"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <footer id="footer">
+    <div class="show-fixed pull-right">
+      You have <a href="#" class="text-bold text-main"><span class="label label-danger">3</span> pending action.</a>
+    </div>
+    <div class="hide-fixed pull-right pad-rgt">
+      ASE
+    </div>
+    <p class="pad-lft">&#0169; 2017 Grupo Andrade  {{ router.url }}</p>
+  </footer>
+  <button class="scroll-top btn">
+            <i class="pci-chevron chevron-up"></i>
+        </button>
+</div>

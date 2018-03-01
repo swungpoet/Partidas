@@ -1,0 +1,110 @@
+<div id="page-title">
+    <h1 class="page-header text-overflow">Cotizar</h1>
+</div>
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Lista de cotizaciones por proveedor</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12 pull-left">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Seleccione un proveedor</label>
+                        <div class="col-md-5">
+                            <p-dropdown [options]="proveedoresDDL" [(ngModel)]="selectedProveedor"  [disabled]="user.idPerfil == 2" placeholder="Seleccione un proveedor" (onChange)="setProveedor()"
+                                [filter]="true" [style]="{'width':'900px'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <!-- <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none" *ngIf=" selectedProveedor != null">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input #gb type="text" pInputText size="50" placeholder="Filtro global" />
+            </div>
+            <p-dataTable [value]="cotizaciones" [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" sortMode="multiple"
+                resizableColumns="true" reorderableColumns="false" [globalFilter]="gb" scrollable="true" scrollWidth="100%" #dt
+                *ngIf=" selectedProveedor != null">
+                <p-column *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"
+                    [style]="{'width': col.width }"></p-column>
+                <p-column styleClass="col-button" [style]="{'width':'100px'}">
+                    <ng-template pTemplate="header">
+                        Acción
+                    </ng-template>
+                    <ng-template let-cot="rowData" pTemplate="body">
+                        <button class="btn btn-primary btn-icon btn-circle" (click)="cotizar(cot)" pTooltip="Cotizar" tooltipPosition="top"><i class="fa fa-credit-card"></i></button>
+                        <button class="btn btn-default btn-icon btn-circle" (click)="cancelar(cot)" pTooltip="Cancelar" tooltipPosition="top"><i class="fa fa-ban"></i></button>
+                    </ng-template>
+                </p-column>
+            </p-dataTable> -->
+            <dx-data-grid [dataSource]="cotizaciones" *ngIf="selectedProveedor != null"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [showBorders]="false"
+                [rowAlternationEnabled]="true"
+                [allowColumnReordering]="false" 
+                [allowColumnResizing]="true" 
+                [columnAutoWidth]="true"
+                (onExporting)="onExporting($event)" (onExported)="onExported($event)">
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <dxo-header-filter [visible]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+
+                <dxi-column dataField="idProveedorCotizacion" caption="ID" [width]="70" [fixed]="true" [filterOperations]="['contains']"></dxi-column>
+                <dxi-column dataField="fechaTXT" caption="Fecha" dataType="date"></dxi-column>
+                <dxi-column dataField="tipoCombustible" caption="Tipo Combustible"></dxi-column>
+                <dxi-column dataField="tipoUnidad" caption="Clase"></dxi-column>
+                <dxi-column dataField="marca" caption="Marca"></dxi-column>
+                <dxi-column dataField="subMarca" caption="SubMarca"></dxi-column>
+                <dxi-column dataField="cilindros"></dxi-column>
+                <dxi-column dataField="estatus"></dxi-column>
+                <dxi-column dataField="idProveedorCotizacion" caption="Acción" cellTemplate="detailTemplate" [width]="100"></dxi-column>
+                <div *dxTemplate="let suc of 'detailTemplate'">
+                    <button class="btn btn-primary btn-icon btn-circle" (click)="cotizar(suc.data)" pTooltip="Cotizar" tooltipPosition="top"><i class="fa fa-credit-card"></i></button>
+                    <button class="btn btn-default btn-icon btn-circle" (click)="cancelar(suc.data)" pTooltip="Cancelar" tooltipPosition="top"><i class="fa fa-ban"></i></button>
+                </div>
+
+                <dxo-pager [showInfo]="true" infoText="Se han encontrado {2} cotizaciones" [showNavigationButtons]="true" [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]">
+                </dxo-pager>
+            </dx-data-grid>
+            <br>
+            <hr>
+        </div>
+    </div>
+</div>
+
+<p-confirmDialog header="Alerta" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>
+
+<!--<modal #myModal title="Seleccione los proveedores a incluir" modalClass="modal-lg" [hideCloseButton]="false" [closeOnEscape]="false"
+    [closeOnOutsideClick]="false" (onOpen)="onOpenModal()">
+    <modal-content>
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="form-horizontal" (ngSubmit)="save()">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <p-pickList [source]="proveedoresLIST" [target]="selectedProveedores" sourceHeader="Disponibles" targetHeader="Seleccionados"
+                                    [responsive]="true" [sourceStyle]="{'height':'100px'}" [targetStyle]="{'height':'100px'}">
+                                    <ng-template let-pro pTemplate="item">
+                                        <div class="ui-helper-clearfix">
+                                            {{pro.razonSocial}}
+                                        </div>
+                                    </ng-template>
+                                </p-pickList>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button #btnClose class="btn btn-default" type="button" (click)="myModal.close(); ">Cancelar</button>
+                        <button class="btn btn-primary" type="submit">Agregar Proveedor(es)</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </modal-content>
+</modal>-->

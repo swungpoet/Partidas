@@ -1,0 +1,331 @@
+<div id="page-title">
+  <h1 class="page-header text-overflow">Aprobar</h1>
+</div>
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+  <div class="panel">
+    <div class="panel-heading">
+      <h3 class="panel-title">Aprobar costos por partida</h3>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-6">
+          Datos Proveedor
+          <div class="provContent">
+            <div class="razonSocial">
+              Razón Social : <strong>  {{ proveedor.razonSocial }}</strong>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-6">
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-xs-12">
+          <button #btnOpen class="btn btn-primary btn-labeled fa fa-play pull-right" (click)="activar()">Activar Lista de Precios</button>
+          <button #btnOpen class="btn btn-info btn-labeled fa fa-check-square-o pull-right" (click)="aprobarPendientes()">Aprobar Pendientes</button>
+          <!-- <button class="btn btn-primary btn-labeled fa fa-file-o pull-right" (click)="dt.exportCSV()">Exportar</button> -->
+          <button #btnOpen class="btn btn-default btn-labeled fa fa-arrow-left pull-right" (click)="regresar()">Regresar</button>
+        </div>
+      </div>
+      <p-tabView>
+        <p-tabPanel header="Aprobar Partidas">
+          <br>
+        <!--   <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+            <input #gb type="text" pInputText size="50" placeholder="Filtro global" />
+          </div>
+          <p-dataTable [value]="partidas" [rows]="10" [paginator]="true" [pageLinks]="5" [rowsPerPageOptions]="[10,50,100]" sortMode="multiple" reorderableColumns="false" [globalFilter]="gb" scrollable="true" scrollWidth="100%"
+            #dt exportFilename="Aprobar {{ proveedor.razonSocial }}">
+            <p-header>Hay <b>{{ partidas.length }}</b> Partidas por Aprobar</p-header>
+            <p-column field="idPartida" header="ID" [style]="{'width': '50px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+            <p-column field="especialidad" header="Especialidad" [style]="{'width': '100px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+            <p-column field="clasificacion" header="Clasificación" [style]="{'width': '150px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+            <p-column field="subClasificacion" header="SubClasificación" [style]="{'width': '150px' }" [sortable]="true" [filter]="true"
+              filterPlaceholder="Buscar"></p-column>
+            <p-column field="partida" header="Partida" [style]="{'width': '120px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+            <p-column field="noParte" header="No. Parte" [style]="{'width': '150px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+            <p-column field="descripcion" header="Descripción" [style]="{'width': '180px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+            <p-column [style]="{'width': '170px' }" field="costoPieza" header="Costo Aprobar" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+              <ng-template pTemplate="header">
+                Costo Aprobar {{ proveedor.razonSocial }}
+              </ng-template>
+              <ng-template let-col let-par="rowData" pTemplate="body">
+                <div class="input-group mar-btm">
+                  <input currencyMask type="text" size="9" [disabled]="par.idPartidaEstatus == 4" [(ngModel)]="par.costoPieza" [ngClass]="{'aprobado' : par.idPartidaEstatus == 4, 'rechazado': par.idPartidaEstatus == 5, 'pendiente': par.idPartidaEstatus < 4 }"
+                    class="form-control ">
+                  <span class="input-group-addon"><i class="fa fa-cog"></i></span>
+                </div>
+                <div class="input-group mar-btm">
+                  <input currencyMask type="text" size="9" [disabled]="par.idPartidaEstatus == 4" [(ngModel)]="par.costoMano" [ngClass]="{'aprobado' : par.idPartidaEstatus == 4, 'rechazado': par.idPartidaEstatus == 5, 'pendiente': par.idPartidaEstatus < 4 }"
+                    class="form-control">
+                  <span class="input-group-addon"><i class="fa fa-hand-paper-o"></i></span>
+                </div>
+                <hr>
+                <div class="montoTotal">
+                  {{ par.costoPieza + par.costoMano | currency:'MXN':true:'1.2-2'}}
+                </div>
+                <div class="row">
+                  <div class="col-xs-5"></div>
+                  <div class="col-xs-3">
+                    <button class="btn btn-success btn-icon btn-circle" (click)="aprobar(par)"><i class="fa fa-check"></i></button>
+                  </div>
+                  <div class="col-xs-3">
+                    <button class="btn btn-danger btn-icon btn-circle" (click)="rechazar(par)"><i class="fa fa-ban"></i></button>
+                  </div>
+                  <div class="col-xs-1">
+                  </div>
+                </div>
+              </ng-template>
+            </p-column>
+            <p-column field="minimo" header="Costo Mínimo" [style]="{'width': '150px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+              <ng-template pTemplate="header">
+                Costo Mínimo
+              </ng-template>
+              <ng-template let-par="rowData" pTemplate="body">
+                <div class="min"> {{ par.minimo | currency:'MXN':true:'.2-2' }} </div>
+              </ng-template>
+            </p-column>
+            <p-column field="maximo" header="Costo Máximo" [style]="{'width': '150px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+              <ng-template pTemplate="header">
+                Costo Máximo
+              </ng-template>
+              <ng-template let-par="rowData" pTemplate="body">
+                <div class="max"> {{ par.maximo | currency:'MXN':true:'.2-2' }} </div>
+              </ng-template>
+            </p-column>
+            <p-column field="promedio" header="Promedio" [style]="{'width': '150px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+              <ng-template pTemplate="header">
+                Costo Promedio
+              </ng-template>
+              <ng-template let-par="rowData" pTemplate="body">
+                <div class="prom"> {{ par.promedio | currency:'MXN':true:'.2-2' }} </div>
+              </ng-template>
+            </p-column>
+            <p-column [style]="{'width':'100px'}">
+              <ng-template pTemplate="header">
+                Foto
+              </ng-template>
+              <ng-template let-par="rowData" pTemplate="body">
+                <div class="fotoContent" [hidden]="par.foto == null || par.foto == '' ">
+                  <a href="{{ URLDocs + par.foto }}" data-lightbox="image" data-title="Foto Partida" class="instructivo">
+                                <img src="{{ URLDocs + par.foto }}" class="fotoUnidad">
+                            </a>
+                </div>
+              </ng-template>
+            </p-column>
+            <p-column [style]="{'width':'100px'}">
+              <ng-template pTemplate="header">
+                Instructivo
+              </ng-template>
+              <ng-template let-par="rowData" pTemplate="body">
+                <div class="fotoContent">
+                  <a href="{{ URLDocs + par.instructivo }}" class="instructivo" download><i class="fa fa-file-pdf-o insIcon" aria-hidden="true"></i></a>
+                </div>
+              </ng-template>
+            </p-column>
+          </p-dataTable> -->
+
+          <dx-data-grid [dataSource]="partidas" id="gridContainer"
+          
+            [showColumnLines]="true"
+            [showRowLines]="true"
+            [showBorders]="false"
+            [rowAlternationEnabled]="true"
+            [allowColumnReordering]="false" 
+            [allowColumnResizing]="true" 
+            [columnAutoWidth]="true"
+            (onExporting)="onExporting($event)" (onExported)="onExported($event)">
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+            <dxo-paging [pageSize]="20"></dxo-paging>
+            <dxo-export [enabled]="true" fileName="Partidas" [allowExportSelectedData]="false"></dxo-export>
+            <dxo-header-filter [visible]="true"></dxo-header-filter>
+            <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+    
+            <dxi-column dataField="idPartida" caption="ID" [fixed]="true" [filterOperations]="['contains']" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="especialidad" caption="Especialidad" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="clasificacion" caption="Clasificacion" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="subClasificacion" caption="SubClasificacion" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="partida" caption="Partida" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="noParte" [visible]="false"></dxi-column>
+            <dxi-column dataField="noParte" cellTemplate="parteTemplate" [width]="200" caption="No. Parte" [allowEditing]="false">
+              <div *dxTemplate="let uni of 'parteTemplate'">
+                <div class="row">
+                  <div class="col-md-12" style="white-space: normal;">
+                    {{uni.data.noParte}}
+                  </div>
+                </div>
+              </div>
+            </dxi-column>
+            <dxi-column dataField="descripcion" [visible]="false"></dxi-column>
+            
+            <dxi-column dataField="descripcion" caption="Descripción" [allowEditing]="false" [width]="400" cellTemplate="descriptionTemplate" >
+              <div *dxTemplate="let uni of 'descriptionTemplate'">
+                <div class="row">
+                  <div class="col-md-12" style="white-space: normal;">
+                    {{uni.data.descripcion}}
+                  </div> 
+                </div>
+              </div>
+            </dxi-column>
+    
+            <dxi-column dataField="costoPieza" [visible]="false" [format]="{type: 'currency', precision: 2}" ></dxi-column>
+            <dxi-column dataField="costoMano" [visible]="false" [format]="{type: 'currency', precision: 2}" ></dxi-column>
+
+            <dxi-column caption="Costo" cellTemplate="costoTemplate" [width]="170" [allowEditing]="false">
+              <div *dxTemplate="let uni of 'costoTemplate'">
+                <div class="row" >
+                  <div class="col-md-12">
+                    <div class="input-group mar-btm">
+                      <dx-number-box [readOnly]="uni.data.idPartidaEstatus == 4" format="$ #,##0.00" [(value)]="uni.data.costoPieza" ></dx-number-box>
+                      <span class="input-group-addon"><i class="fa fa-cog"></i></span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="row" >
+                  <div class="col-md-12">
+                    <div class="input-group mar-btm">
+                      <dx-number-box [readOnly]="uni.data.idPartidaEstatus == 4" format="$ #,##0.00" [(value)]="uni.data.costoMano"></dx-number-box>
+                      <span class="input-group-addon"><i class="fa fa-hand-paper-o"></i></span>
+                    </div>
+                  </div>
+                </div>
+                <hr>
+    
+                <div class="montoTotal">
+                  {{uni.data.costoPieza + uni.data.costoMano | currency:'MXN': true: '1.2-2'}}
+                </div>
+    
+                <div class="row">
+                  <div class="col-xs-3"></div>
+                  <div class="col-xs-3">
+                    <button class="btn btn-success btn-icon btn-circle" (click)="aprobar(uni.data)"><i class="fa fa-check"></i></button>
+                  </div>
+                  <div class="col-xs-3">
+                    <button class="btn btn-danger btn-icon btn-circle" (click)="rechazar(uni.data)"><i class="fa fa-ban"></i></button>
+                  </div>
+                </div>
+              </div>
+            </dxi-column>
+            
+            <dxi-column dataField="minimo" caption="Costo Mínimo" [width]="150" [format]="{type: 'currency', precision: 2}" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="maximo" caption="Costo Máximo" [width]="150" [format]="{type: 'currency', precision: 2}" [allowEditing]="false"></dxi-column>
+            <dxi-column dataField="promedio" caption="Costo Promedio" [width]="150" [format]="{type: 'currency', precision: 2}" [allowEditing]="false"></dxi-column>
+            
+    
+            <dxi-column caption="Foto" cellTemplate="fotoTemplate" [allowEditing]="false"></dxi-column>
+            <div *dxTemplate="let uni of 'fotoTemplate'" class="fotoContent" [hidden]="uni.data.foto == null || uni.data.foto == '' ">
+                <a href="{{ URLDocs + uni.data.foto }}" data-lightbox="image" data-title="Foto Partida" class="instructivo">
+                    <img src="{{ URLDocs + uni.data.foto }}" class="fotoUnidad">
+                </a>
+            </div>
+    
+            <dxi-column caption="Instructivo" cellTemplate="instructivoTemplate" [allowEditing]="false"></dxi-column>
+            <div *dxTemplate="let uni of 'instructivoTemplate'" class="fotoContent" [hidden]="uni.data.instructivo == null || uni.data.instructivo == '' ">
+                <a href="{{ URLDocs + uni.data.instructivo }}" target="_blank" class="instructivo"><i class="fa fa-file-pdf-o insIcon" aria-hidden="true"></i>
+                </a>
+            </div>
+    
+            <dxo-pager [showInfo]="true" infoText="Se han encontrado {2} registros" [showNavigationButtons]="true" [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]">
+            </dxo-pager>
+          </dx-data-grid>
+        </p-tabPanel>
+        <!-- <p-tabPanel header="Aprobar Kit´s">
+          <br>
+          <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+            <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+            <input #gb type="text" pInputText size="50" placeholder="Filtro global" />
+          </div>
+          <p-dataTable [value]="kits" sortMode="multiple" reorderableColumns="false" [globalFilter]="gb" scrollable="true" scrollWidth="100%"
+            #dtKit>
+            <p-column field="idKit" header="ID" [style]="{'width': '50px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+            <p-column field="partida" header="Partida" [style]="{'width': '120px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+            <p-column field="descripcion" header="Descripción" [style]="{'width': '280px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+            <p-column field="partidas" header="Partidas" [style]="{'width': '80px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+            <p-column [style]="{'width': '170px' }" field="col.field" header="col.header" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+              <ng-template pTemplate="header">
+                Costo Aprobar
+              </ng-template>
+              <ng-template let-col let-par="rowData" pTemplate="body">
+                <div class="input-group mar-btm">
+                  <input currencyMask type="text" size="9" [disabled]="par.idPartidaEstatus == 4" [(ngModel)]="par.costoPieza" [ngClass]="{'aprobado' : par.idPartidaEstatus == 4, 'rechazado': par.idPartidaEstatus == 5, 'pendiente': par.idPartidaEstatus < 4 }"
+                    class="form-control ">
+                  <span class="input-group-addon"><i class="fa fa-cog"></i></span>
+                </div>
+                <div class="input-group mar-btm">
+                  <input currencyMask type="text" size="9" [disabled]="par.idPartidaEstatus == 4" [(ngModel)]="par.costoMano" [ngClass]="{'aprobado' : par.idPartidaEstatus == 4, 'rechazado': par.idPartidaEstatus == 5, 'pendiente': par.idPartidaEstatus < 4 }"
+                    class="form-control">
+                  <span class="input-group-addon"><i class="fa fa-hand-paper-o"></i></span>
+                </div>
+                <hr>
+                <div class="montoTotal">
+                  {{ par.costoPieza + par.costoMano | currency:'MXN':true:'1.2-2'}}
+                </div>
+                <div class="row">
+                  <div class="col-xs-5"></div>
+                  <div class="col-xs-3">
+                    <button class="btn btn-success btn-icon btn-circle" (click)="aprobar(par)"><i class="fa fa-check"></i></button>
+                  </div>
+                  <div class="col-xs-3">
+                    <button class="btn btn-danger btn-icon btn-circle" (click)="rechazar(par)"><i class="fa fa-ban"></i></button>
+                  </div>
+                  <div class="col-xs-1">
+                    <button class="btn btn-primary btn-icon btn-circle" (click)="aprobar(par)"><i class="fa fa-commenting-o"></i></button>
+                  </div>
+                </div>
+              </ng-template>
+            </p-column>
+            <p-column field="col.field" header="col.header" [style]="{'width': '150px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+              <ng-template pTemplate="header">
+                Costo Mínimo
+              </ng-template>
+              <ng-template let-par="rowData" pTemplate="body">
+                <div class="min"> {{ par.minimo | currency:'MXN':true:'.2-2' }} </div>
+              </ng-template>
+            </p-column>
+            <p-column field="col.field" header="col.header" [style]="{'width': '150px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+              <ng-template pTemplate="header">
+                Costo Máximo
+              </ng-template>
+              <ng-template let-par="rowData" pTemplate="body">
+                <div class="max"> {{ par.maximo | currency:'MXN':true:'.2-2' }} </div>
+              </ng-template>
+            </p-column>
+            <p-column field="col.field" header="col.header" [style]="{'width': '150px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+              <ng-template pTemplate="header">
+                Costo Promedio
+              </ng-template>
+              <ng-template let-par="rowData" pTemplate="body">
+                <div class="prom"> {{ par.promedio | currency:'MXN':true:'.2-2' }} </div>
+              </ng-template>
+            </p-column>
+            <p-column *ngFor="let col of cols" field="col.field" header="col.header" [style]="{'width': col.width }" [sortable]="true"
+              [filter]="true" filterPlaceholder="Buscar">
+              <ng-template pTemplate="header">
+                {{ col.header }}
+              </ng-template>
+              <ng-template let-par="rowData" pTemplate="body">
+                <div class="other"> {{ par[col.field] | currency:'MXN':true:'.2-2' }} </div>
+              </ng-template>
+            </p-column>
+            <p-column [style]="{'width':'100px'}">
+              <ng-template pTemplate="header">
+                Instructivo
+              </ng-template>
+              <ng-template let-par="rowData" pTemplate="body">
+                <div class="fotoContent">
+                  <a href="{{ URLDocs + par.instructivo }}" class="instructivo" download><i class="fa fa-file-pdf-o insIcon" aria-hidden="true"></i></a>
+                </div>
+              </ng-template>
+            </p-column>
+          </p-dataTable>
+        </p-tabPanel> -->
+      </p-tabView>
+    </div>
+  </div>
+</div>
+
+<p-confirmDialog header="Alerta" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>

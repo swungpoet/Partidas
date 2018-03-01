@@ -1,0 +1,12 @@
+ .modal-grande {
+    width: 1500px;
+  }
+  
+.tab-base .nav-tabs>.active>a,
+.tab-base .nav-tabs>.active a:hover,
+.tab-base .nav-tabs>.active>a:focus {
+    background-color: #249e92;
+    border-color: #26a69a;
+    color: #fff
+}
+

@@ -1,0 +1,116 @@
+.fotoUnidad{
+    width: 90px !important;
+}
+
+.fotoContent{
+    width: 100% !important;
+    text-align: center !important;
+}
+
+.instructivoContent{
+    width: 35% !important;
+    text-align: center !important;
+}
+
+.deleteLink{
+    color: #a00404 !important;
+    cursor: pointer;
+}
+
+.instructivo{
+    cursor: pointer;
+}
+
+.insIcon{
+    font-size: 25px;
+    color: cornflowerblue;
+}
+
+.times{
+    color: #0D42B3 !important;
+    font-size: 16px !important;
+}
+
+.pending{
+    color: red !important;
+    text-align: right !important; 
+    font-size: 16px !important;
+}
+
+.setted{
+    color: green !important;
+    text-align: right !important; 
+    font-size: 16px !important;
+}
+
+.other{
+     color: #1f89ce !important;
+    text-align: center !important; 
+    font-size: 16px !important;
+    font-weight: 500;
+}
+
+.min{
+     color: #13b113 !important;
+    font-size: 16px !important;
+    font-weight: 500;
+}
+
+.max{
+     color: #ca0000 !important;
+
+    font-size: 16px !important;
+    font-weight: 500;
+}
+
+.prom{
+     color: #4E223C !important;
+    font-size: 16px !important;
+    font-weight: 500;
+}
+
+.aprContenedor{
+    margin-right: 5px !important;
+}
+
+.aprCantidad{
+    width: 110px !important; 
+}
+
+.inputPercent{
+    width: 60px !important;
+}
+
+.montoTotal{
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+    text-align: right;
+    margin-top: -10px;
+    margin-bottom: 5px;
+    color: #656565;
+}
+
+.hidden{
+    display: none;
+}
+
+.divisor{
+    background-color: #e6e6e6;
+    padding: 2px;
+    border-radius: 3px;
+}
+
+.timeContainer{
+    height: 33px !important;
+}
+
+.value-label {
+    font-size: 8px;
+    margin-bottom: -30px;
+    FONT-WEIGHT: 100;
+}
+
+/deep/ #gridContainer td{
+    vertical-align: middle;
+}

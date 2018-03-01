@@ -1,0 +1,42 @@
+<div id="page-title">
+  <h1 class="page-header text-overflow">Establecer zonas de cobertura por proveedor</h1>
+</div>
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+  <div class="panel">
+    <div class="panel-heading">
+      <h3 class="panel-title">Seleccione las zonas</h3>
+    </div>
+    <div class="panel-body">
+      <form class="form-horizontal" [formGroup]="frmZona" (ngSubmit)="save(frmZona.value);">
+        <div class="row">
+          <div class="col-xs-12 pull-left">
+            <div class="form-group">
+              <label class="col-md-2 control-label">Seleccione un proveedor</label>
+              <div class="col-md-5">
+                <p-dropdown [options]="proveedoresDDL" [formControl]="frmZona.controls['idContratoProveedor']" placeholder="Seleccione un proveedor"
+                  (onChange)="setProveedor()" [filter]="true" [style]="{'width':'900px'}">
+                </p-dropdown>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-xs-12">
+            <p-tree [value]="files" layout="horizontal" expanded="true" [(selection)]="selectedFiles" selectionMode="checkbox" [propagateSelectionUp]="true"
+              [propagateSelectionDown]="true"></p-tree>
+            <div style="margin-top:8px">Nodo seleccionado: {{selectedFile ? selectedFile.label : 'none'}}</div>
+          </div>
+        </div>
+        <br>
+        <div class="text-right">
+          <button class="btn btn-default" type="button" (click)="regresar()">Regresar</button>
+          <button class="btn btn-primary" type="submit" [disabled]="!frmZona.valid">Guardar Cobertura</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<p-confirmDialog header="Alerta" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>

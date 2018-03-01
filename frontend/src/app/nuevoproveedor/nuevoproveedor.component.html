@@ -1,0 +1,220 @@
+<div id="page-title">
+    <h1 class="page-header text-overflow">Alta de Proveedores</h1>
+</div>
+
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+    <dx-popup class="popup" width="80%" height="90%" [showTitle]="true" title="Expediente Electrónico del Proveedor"
+        [dragEnabled]="true" [closeOnOutsideClick]="true" [(visible)]="popupVisible">
+        <div class="row">
+            <div class="col-xs-12">
+                <div *dxTemplate="let data of 'content'">
+                    <dx-scroll-view  [showScrollbar]="'always'" style="height: calc(100% - 36px);">
+                        <form action="my-action" (submit)="saveDocument($event)">                                
+                            <dx-form id="formExpediente" [formData]="expediente" validationGroup="expediente" [readOnly]="false" [showColonAfterLabel]="true">
+                                <dxi-item itemType="group">
+                                    <dxi-item dataField="selectedDocumento" editorType="dxSelectBox" [editorOptions]="{dataSource: documentosDDL}">
+                                        <dxo-label text="Tipo Documento"></dxo-label>
+                                        <dxi-validation-rule type="required" message="Tipo de documento es obligatorio"></dxi-validation-rule>
+                                    </dxi-item>
+                                    <dxi-item dataField="folio">
+                                    </dxi-item>
+                                    <dxi-item dataField="vigencia" editorType="dxDateBox">
+                                    </dxi-item>
+                                    <dxi-item>
+                                        <div id="fileuploader-container">
+                                            <div class="dx-field">                                                        
+                                                <div class="dx-field-value">                                                            
+                                                    <dx-file-uploader
+                                                        selectButtonText="Selecccionar documento"
+                                                        labelText=""
+                                                        accept="image/*"
+                                                        uploadUrl="{{URL + 'file/upload'}}"
+                                                        (onUploaded) = "onUploadDocument($event)"
+                                                        uploadMode="useButtons"
+                                                        [(value)]="documento">
+                                                    </dx-file-uploader>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </dxi-item>
+                                </dxi-item>
+                            </dx-form>
+                            <br>
+                            <div class="row">
+                                <div class="text-right">
+                                    <dx-button class="btn btn-default" type="normal" text="Cancelar" [visible]="true" (click)="close();"></dx-button>
+                                    <dx-button class="btn btn-primary" validationGroup="expediente" text="Agregar Documento"  [visible]="true" type="success" [useSubmitBehavior]="true"></dx-button>
+                                </div>
+                            </div>
+                        </form>
+                        <br>
+                        <div class="row">
+                            <dx-data-grid [dataSource]="documentos">
+                                <dxi-column dataField="descripcion"></dxi-column>
+                                <dxi-column dataField="folio"></dxi-column>
+                                <dxi-column dataField="vigenciaTXT"></dxi-column>
+                                <dxi-column dataField="fechaCargaTXT"></dxi-column>
+                                <dxi-column dataField="idProveedorDocumento" caption="Link" cellTemplate="detailTemplate"></dxi-column>
+                                <div *dxTemplate="let doc of 'detailTemplate'">
+                                    <div class="instructivoContent">
+                                        <a href="{{ URLDocs + '/partidas/' + doc.data.archivo }}" class="instructivo" download><i class="fa fa-file-pdf-o insIcon" aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+
+                                <dxi-column dataField="idProveedorDocumento" caption="Acción" cellTemplate="mydetailTemplate"></dxi-column>
+                                <div *dxTemplate="let doc of 'mydetailTemplate'">
+                                    <!-- <button class="btn btn-default btn-icon btn-circle" (click)="editarDocumento(doc.data)" pTooltip="Editar" tooltipPosition="top"><i class="fa fa-pencil"></i></button> -->
+                                    <button class="btn btn-default btn-icon btn-circle" (click)="eliminarDocumento(doc.data)" pTooltip="Eliminar" tooltipPosition="top"><i class="fa fa-trash-o"></i></button>
+                                </div>
+                            </dx-data-grid>
+                        </div>
+                    </dx-scroll-view>
+                </div>
+            </div>
+        </div>        
+    </dx-popup>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Introduzca todos los datos para crear/editar un proveedor</h3>
+                </div>
+                <div class="panel-body">
+                    <form action="your-action" (submit)="save($event)">
+                        <dx-form id="formProveedor" [formData]="proveedor" validationGroup="proveedor" [colCount]="2" [readOnly]="false" [showColonAfterLabel]="true">
+                            <dxi-item itemType="group" caption="Datos Proveedor">
+                                <dxi-item dataField="idProveedor" [disabled]="true" [(visible)]="btnExpediente">
+                                    <dxo-label text="ID"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="razonSocial">
+                                    <dxo-label text="Razón Social"></dxo-label>
+                                    <dxi-validation-rule type="required" message="Razón Social es obligatoria"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="RFC">
+                                    <dxi-validation-rule type="required" message="RFC es obligatorio"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="fechaInicio" editorType="dxDateBox">
+                                </dxi-item>
+                                <dxi-item dataField="selectedCategoria" editorType="dxSelectBox" [editorOptions]="{dataSource: categoriasDDL}">
+                                    <dxo-label text="Categoría"></dxo-label>
+                                    <dxi-validation-rule type="required" message="Categoría es obligatoria"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item>
+                                    <div id="fileuploader-container">
+                                        <div class="dx-field">                                                        
+                                            <div class="dx-field-value">                                                            
+                                                <dx-file-uploader
+                                                    selectButtonText="Selecccionar logo"
+                                                    labelText=""
+                                                    accept="image/*"
+                                                    uploadUrl="{{URL + 'file/upload'}}"
+                                                    (onUploaded) = "onUpload($event)"
+                                                    uploadMode="useButtons"
+                                                    [(value)]="logo">
+                                                </dx-file-uploader>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="proveedor.logo != '' && proveedor.logo != undefined && proveedor.logo != null" class="fotoContent">
+                                        <a href="{{URLDocs + 'partidas/' + proveedor.logo}}" data-lightbox="image" data-title="Foto Proveedor" class="instructivo">
+                                            <img src="{{URLDocs + 'partidas/' + proveedor.logo}}" style="width:120px;">
+                                        </a>
+                                    </div>    
+                                </dxi-item>
+                                <dxi-item id="tileView" [(visible)]="btnExpediente">
+                                    Documentos
+                                    <dx-tile-view [height]="390" [baseItemHeight]="100" [baseItemWidth]="160" [itemMargin]="10" direction="vertical" (onItemContextMenu)="onItemContextMenu($event)">
+                                        <dxi-item *ngFor="let doc of documentos">
+                                            <div >
+                                                <div class="price">{{doc.descripcion}}</div>
+                                                <a href="{{ URLDocs + 'partidas/' + doc.archivo }}" target="_blank" *ngIf="doc.archivo.indexOf('.jpg')==-1 && doc.archivo.indexOf('.png')==-1">
+                                                    <img class="img-responsive" style="height: 80px; padding-left: 30px;" src="../assets/file.png">
+                                                </a>
+                                                <a href="{{ URLDocs + 'partidas/' + doc.archivo }}" target="_blank" *ngIf="doc.archivo.indexOf('.pdf')==-1">
+                                                    <img class="img-responsive" src="{{ URLDocs + '/partidas/' + doc.archivo }}">
+                                                </a>
+                                            </div>
+                                            <dx-context-menu 
+                                                [dataSource]="menuItems" 
+                                                [width]="200" 
+                                                target="#tileView" 
+                                                (onItemClick)="onItemClick($event)">
+                                            </dx-context-menu>
+                                        </dxi-item>
+                                    </dx-tile-view>
+                                </dxi-item>
+                            </dxi-item>
+
+                            <dxi-item itemType="group" caption="Datos Fiscales">
+                                <dxi-item dataField="tipoPersonaValue" editorType="dxSelectBox" [editorOptions]="{dataSource: tipoPersonaDDL}">
+                                    <dxo-label text="Tipo Persona"></dxo-label>
+                                    <dxi-validation-rule type="required" message="Tipo de Persona es obligatorio"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="pais">
+                                    <dxi-validation-rule type="required" message="País es obligatorio"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="estado">
+                                    <dxi-validation-rule type="required" message="Estado es obligatorio"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="ciudad">
+                                    <dxi-validation-rule type="required" message="Ciudad es obligatoria"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="delegacion">
+                                    <dxi-validation-rule type="required" message="Delegación es obligatoria"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="colonia">
+                                    <dxi-validation-rule type="required" message="Colonia es obligatoria"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="calle">
+                                    <dxi-validation-rule type="required" message="Calle es obligatoria"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="numExt">
+                                    <dxo-label text="Número Ext."></dxo-label>
+                                    <dxi-validation-rule type="required" message="Número Exterior es obligatorio"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="numInt">
+                                    <dxo-label text="Número Int."></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="cp">
+                                    <dxo-label text="CP"></dxo-label>
+                                    <dxi-validation-rule type="required" message="CP es obligatorio"></dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item dataField="LADA"></dxi-item>
+                                <dxi-item [(visible)]="btnExpediente">
+                                    <dx-data-grid [dataSource]="IDs">
+                                        <dxi-column dataField="nombreComercial" caption="Nombre Comercial"></dxi-column>
+                                        <dxi-column dataField="razonSocial" caption="Razón Social"></dxi-column>
+                                        <dxi-column dataField="idBPRO"></dxi-column>
+                                    </dx-data-grid>
+                                </dxi-item>
+                            </dxi-item>                            
+                        </dx-form>
+                        <div class="row">
+                            <div class="dx-fieldset text-right">
+                                <div class="dx-field">
+                                    <dx-button type="default" [(visible)]="btnExpediente" class="btn btn-primary btn-icon btn-circle" (onClick)="onOpenExpediente()" text="Expediente"></dx-button>
+                                    <dx-button type="normal" text="Cancelar" (onClick)="cancelar()"></dx-button>
+                                    <dx-button text="Guardar Proveedor" [visible]="true" type="success" validationGroup="proveedor" [useSubmitBehavior]="true"></dx-button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a #btnOpen (click)="mdModal.open()"></a>
+<modal #mdModal title="Expediente Electrónico del Proveedor" modalClass="modal-lg" [hideCloseButton]="false" [closeOnEscape]="false" [closeOnOutsideClick]="false" (onOpen)="onOpenExpediente()">
+    <modal-header>
+        Agregar Documentos.
+    </modal-header>
+    <modal-content>
+        
+    </modal-content>
+</modal>
+
+<p-confirmDialog header="Alerta" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>

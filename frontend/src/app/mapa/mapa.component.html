@@ -1,0 +1,91 @@
+<div id="page-title">
+  <h1 class="page-header text-overflow">Mapa</h1>
+</div>
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+  <div class="panel">
+    <div class="panel-heading">
+      <h3 class="panel-title">Red nacional de talleres</h3>
+    </div>
+    <div class="panel-body">
+      <div class="form-group mapContainer">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="col-md-8">
+              <div class="dx-field">
+                <div class="dx-field-label" style="width: 10%;">Cliente</div>
+                <div class="dx-field-value" style="width: 90%;">
+                  <dx-drop-down-box [(value)]="zonaSelected" valueExpr="idZona" displayExpr="nombre" placeholder="Selecciona una Zona..." [showClearButton]="true"
+                    [dataSource]="AllZonasTree" (onValueChanged)="onZonaValueChanged($event)">
+                    <div *dxTemplate="let data of 'content'">
+                      <dx-tree-list id="tasks" [dataSource]="AllZonasTree" keyExpr="idZona" parentIdExpr="idPadre" (onRowClick)="onZonaRowClick($event)"
+                        [allowColumnResizing]="true" [columnResizingMode]="nextColumn" [columnAutoWidth]="true">
+                        <dxo-search-panel [visible]="true" width="250"></dxo-search-panel>
+                        <dxo-header-filter [visible]="true"></dxo-header-filter>
+                        <dxo-selection mode="single"></dxo-selection>
+                        <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+                        <dxi-column dataField="nombre" caption="Zona"></dxi-column>
+                        <dxi-column dataField="direccion" caption="Direccion"></dxi-column>
+                        <dxi-column dataField="latitud" caption="Latitud"></dxi-column>
+                        <dxi-column dataField="longitud" caption="Longitud"></dxi-column>
+                      </dx-tree-list>
+                    </div>
+                  </dx-drop-down-box>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="dx-field">
+                <div class="dx-field-label">Taller</div>
+                <div class="dx-field-value">
+                  <dx-select-box [items]="TallerDDL" (onValueChanged)="onTallerValueChanged($event)">
+                  </dx-select-box>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br/>
+        <agm-map #gm [latitude]="latitude" [longitude]="longitude" [scrollwheel]="true" [zoom]="zoom">
+          <!--<sebm-google-map-marker [latitude]="latitude" [longitude]="longitude" [label]="'P'" [markerDraggable]="true"></sebm-google-map-marker>-->
+          <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.lat, m.lng); gm.lastOpen?.close(); gm.lastOpen = infoWindow;" [latitude]="m.lat" [longitude]="m.lng"
+            [markerDraggable]="false" [iconUrl]="m.icon" item-width="80" item-height="80">
+            <agm-info-window #infowindow [maxWidth]="300" [disableAutoPan]="true" #infoWindow>
+              <div *ngIf="m.logo!=null">
+                <img src="{{URLDocs + m.logo}}" style="width:100%; height:100%" *ngIf="m.logo!=null" />
+                <br>
+                <hr>
+              </div>
+              <strong>{{ m.nombre}}</strong>
+              <br> {{ m.direccion}}
+              <br>
+              <a class="linkProveedor" routerLink="/nuevasucursal/{{m.idProveedorEncabezado}}/{{m.idProveedor}}"> Ver Proveedor</a>
+              <br>
+              <button type="button" class="btn btn-link" (click)="setOrigin(m.lat, m.lng, m.nombre)" >¿Cómo llegar desde aqui?</button>
+              <br>{{nombreOrigen}}
+              <br>
+              <button type="button" class="btn btn-link" (click)="setDestination(m.lat, m.lng, m.nombre)">¿Cómo llegar hasta aqui?</button>
+              <br>{{nombreDestino}}
+              <div *ngIf="(origen[0]!='0' && origen[1]!=0 && destino[0]!=0 && destino[1]!=0)">
+                <hr>
+                <label> Distancia: {{distancia}}</label>
+                <br>
+                <label> Tiempo: {{tiempo}}</label>
+                <hr>
+              </div>
+            </agm-info-window>
+          </agm-marker>
+          <agm-polyline *ngIf="(origen[0]!='0' && origen[1]!=0 && destino[0]!=0 && destino[1]!=0)">
+            <agm-polyline-point [latitude]="origen[0]" [longitude]="origen[1]">
+            </agm-polyline-point>
+            <agm-polyline-point [latitude]="destino[0]" [longitude]="destino[1]">
+            </agm-polyline-point>
+          </agm-polyline>
+        </agm-map>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-confirmDialog header="Alerta" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>

@@ -1,0 +1,323 @@
+<div id="page-title">
+    <h1 class="page-header text-overflow">Proveedores</h1>
+</div>
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+
+    <!-- Basic Data Tables -->
+    <!--===================================================-->
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Catálogo</h3>
+
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="input-group">
+                        <input placeholder="Introduzca una palabra para buscar..." type="text" class="form-control" [(ngModel)]="textoBusqueda">
+                        <span class="input-group-btn">
+                            <button class="btn btn-info " type="button" (click)="onValueChanged()"><span class="fa fa-search"></span></button>
+                        </span>
+                        <!-- <span class="input-group-addon">
+                            <button class="btn btn-info" type="button" (click)="onValueChanged()"><i class="fa fa-search"></i></button>
+                        </span>
+                        <input class="form-control" type="text" placeholder="Search..." (value)="textoBusqueda" > -->
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <!-- <input type="text" (change)="onValueChanged($event)" [(value)]="textoBusqueda" > -->
+                    <button class="btn btn-warning btn-labeled fa fa-plus pull-right" routerLink="/nuevoproveedor">Nuevo Proveedor</button>
+                    <!-- <button class="btn btn-primary btn-labeled fa fa-file-o pull-right" (click)="dt.exportCSV()">Exportar</button> -->
+                </div>
+            </div>
+            <br>
+            <!-- <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input #gb type="text" pInputText size="50" placeholder="Filtro global" />
+            </div> -->
+            <!-- <p-dataTable [value]="proveedores" [rows]="10" [paginator]="true" [pageLinks]="5" [rowsPerPageOptions]="[10,50,100]" sortMode="multiple" scrollable="true" scrollWidth="100%" reorderableColumns="true" [responsive]="true" [globalFilter]="gb" #dt exportFilename="Proveedores">
+                <p-header>Hay <b>{{ proveedores.length }}</b> Proveedores</p-header>
+                <p-column *ngFor="let col of cols" [field]="col.field" [header]="col.header" [style]="{'width': col.width }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+                <p-column styleClass="col-button" [style]="{'width': '180px' }">
+                    <ng-template pTemplate="header">
+                        Acción
+                    </ng-template>
+                    <ng-template let-pro="rowData" pTemplate="body">
+                        <button class="btn btn-primary btn-icon btn-circle" (click)="expediente(pro)" pTooltip="Expediente" tooltipPosition="top"><i class="fa fa-folder-open"></i></button>
+                        <button class="btn btn-warning btn-icon btn-circle" (click)="mdCuenta.open(); onOpenCuenta(pro);" pTooltip="Enviar Acceso" tooltipPosition="top"><i class="fa fa-key"></i></button>
+                        <button class="btn btn-default btn-icon btn-circle" (click)="editar(pro)" pTooltip="Editar" tooltipPosition="top"><i class="fa fa-pencil"></i></button>
+                        <button class="btn btn-default btn-icon btn-circle" (click)="eliminar(pro)" pTooltip="Eliminar" tooltipPosition="top"><i class="fa fa-trash-o"></i></button>
+                    </ng-template>
+                </p-column>
+            </p-dataTable> -->
+
+            <!-- <dx-data-grid #dt id="gridContainer" [dataSource]="proveedores" 
+            [showColumnLines]="true"
+            [showRowLines]="true"
+            [showBorders]="false"
+            [rowAlternationEnabled]="true"
+            [allowColumnReordering]="false" 
+            [allowColumnResizing]="true" 
+            [columnAutoWidth]="true" 
+            (onExporting)="onExporting($event)"
+            (onExported)="onExported($event)"
+            [masterDetail]="{ enabled: true, template: 'detail' }">
+                <dxo-export [enabled]="true" fileName="Proveedores"></dxo-export>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <dxo-header-filter [visible]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+
+                <dxi-column dataField="idProveedorEncabezado" caption="ID" [fixed]="true" [width]="70" [filterOperations]="['contains']">
+                    
+                </dxi-column>
+                <dxi-column dataField="RFC" caption="RFC" [filterOperations]="['contains']" [width]="200" ></dxi-column>
+                <dxi-column dataField="fechaInicio" caption="Fecha Inicio" dataType="date" [width]="200" ></dxi-column>
+                <dxi-column dataField="categoria" caption="Categoría" [filterOperations]="['contains']" [width]="200" ></dxi-column>
+                <dxi-column dataField="idProveedorEncabezado" [allowFiltering]="false" [fixed]="true" [allowSorting]="false" caption="Acción" cellTemplate="cellTemplate" [width]="200"></dxi-column>
+
+                <div *dxTemplate="let pro of 'cellTemplate'">
+                    <button class="btn btn-success btn-icon btn-circle" (click)="nuevaSucursal(pro.data)" pTooltip="Agregar Sucursal" tooltipPosition="top"><i class="fa fa-plus"></i></button>
+                    <button class="btn btn-primary btn-icon btn-circle" (click)="expediente(pro.data)" pTooltip="Expediente" tooltipPosition="top"><i class="fa fa-folder-open"></i></button>
+                    <button class="btn btn-warning btn-icon btn-circle" (click)="mdCuenta.open(); onOpenCuenta(pro.data);" pTooltip="Enviar Acceso" tooltipPosition="top"><i class="fa fa-key"></i></button>
+                    <button class="btn btn-default btn-icon btn-circle" (click)="editar(pro.data)" pTooltip="Editar" tooltipPosition="top"><i class="fa fa-pencil"></i></button>
+                    <button class="btn btn-default btn-icon btn-circle" (click)="eliminar(pro.data)" pTooltip="Eliminar" tooltipPosition="top"><i class="fa fa-trash-o"></i></button>
+                </div>
+                <dxi-column dataField="razonSocial" caption="Razón Social" [fixed]="true" [filterOperations]="['contains']"></dxi-column>
+                <dxo-pager [showInfo]="true" infoText="Se han encontrado {2} proveedores" [showNavigationButtons]="true">
+
+                </dxo-pager>
+
+
+                <div *dxTemplate="let employee of 'detail'">
+                    <div class="internal-grid-container">
+                        <dx-data-grid class="internal-grid" [dataSource]="employee.data.children" 
+                        [showColumnLines]="true"
+                        [showRowLines]="true"
+                        [rowAlternationEnabled]="true"
+                        [showBorders]="true" 
+                        [columnAutoWidth]="true">
+                            <dxi-column dataField="idProveedor" caption="Acción" cellTemplate="detailTemplate" [width]="100"></dxi-column>
+                            <div *dxTemplate="let suc of 'detailTemplate'">
+                                <button class="btn btn-default btn-icon btn-circle" (click)="editarSucursal(suc.data)" pTooltip="Editar" tooltipPosition="top"><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-default btn-icon btn-circle" (click)="eliminarSucursal(suc.data)" pTooltip="Eliminar" tooltipPosition="top"><i class="fa fa-trash-o"></i></button>
+                            </div>
+
+                            <dxi-column dataField="nombreComercial" caption="Nombre Comercial"></dxi-column>
+                            <dxi-column dataField="clasificacion" caption="Clasificacion"></dxi-column>
+                            <dxi-column dataField="contacto" caption="Contacto"></dxi-column>
+                            <dxi-column dataField="telefono" caption="Telefono"></dxi-column>
+                        </dx-data-grid>
+                    </div>
+                </div>
+            </dx-data-grid> -->
+
+            <dx-data-grid [dataSource]="proveedores" [showColumnLines]="true" [showRowLines]="true" [showBorders]="false" id="gridContainer"
+                [masterDetail]="{ enabled: false, template: 'detail', autoExpandAll: true }">
+                <dxo-load-panel [enabled]="false"></dxo-load-panel>
+                <dxo-scrolling mode="infinite"></dxo-scrolling>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-search-panel [visible]="false" [width]="240" placeholder="Search..."></dxo-search-panel>
+                <dxi-column dataField="idProveedorEncabezado" caption="ID" [fixed]="true" [width]="100" [filterOperations]="['contains']"></dxi-column>
+                <dxi-column dataField="razonSocial" caption="Razón Social"  ></dxi-column>
+                <dxi-column dataField="RFC" caption="RFC" [filterOperations]="['contains']"  ></dxi-column>
+                <!-- <dxi-column dataField="categoria" caption="Categoría" [filterOperations]="['contains']"  ></dxi-column> -->
+
+                <div *dxTemplate="let employee of 'detail'">
+                    <div class="row employeeInfo">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <dx-tile-view [height]="130" [baseItemHeight]="50" [baseItemWidth]="80" [itemMargin]="10" direction="vertical" noDataText="">
+                                        <dxi-item *ngFor="let doc of employee.data.documentos">
+                                            <div class="price">{{doc.descripcion}}</div>
+                                            <a href="{{ URLDocs + 'partidas/' + doc.archivo }}" target="_blank" *ngIf="doc.archivo.indexOf('.jpg')==-1 && doc.archivo.indexOf('.png')==-1">
+                                                <img class="img-responsive" style="height: 40px; padding-left: 15px;" src="../assets/file.png">
+                                            </a>
+                                            <a href="{{ URLDocs + 'partidas/' + doc.archivo }}" data-lightbox="image" data-title="Foto Partida" class="instructivo" *ngIf="doc.archivo.indexOf('.pdf')==-1">
+                                                <img class="img-responsive" src="{{ URLDocs + '/partidas/' + doc.archivo }}">
+                                            </a>
+                                        </dxi-item>
+                                    </dx-tile-view>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-xs btn-primary pull-right" [routerLink]="['../nuevoproveedor', employee.data.idProveedorEncabezado]">Editar</button>
+                                    <br>
+                                    <button type="button" class="btn btn-xs btn-info pull-right" [routerLink]="['../nuevasucursal', employee.data.idProveedorEncabezado]">Agregar</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div *ngFor="let children of employee.data.children">
+                                <div class="row">
+                                    <div class="col-md-9" style="white-space: normal;">
+                                        {{'ID Sucursal: ' + children.idProveedor}}
+                                        <br>
+                                        {{'Nombre Sucursal: ' +  children.nombreComercial}}
+                                        <br>
+                                        <a *ngIf="children.latitud != null && children.longitud != null" [routerLink]="['../mapa']" [queryParams]="{ idProveedor: children.idProveedor, latitud: children.latitud, longitud: children.longitud }">{{'Dirección: ' + children.direccion}}</a>
+                                        <a *ngIf="children.latitud == null || children.longitud == null">{{'Dirección: ' + children.direccion}}</a>
+                                        <br>
+                                        {{'Clasificación: ' + children.clasificacion}}
+                                        <br>
+                                        <i class="fa fa-phone" aria-hidden="true"></i>{{' Telefono: ' + children.telefono}}
+                                        <i class="fa fa-user" aria-hidden="true"></i>{{' Contacto: ' + children.contacto}}
+                                        <i class="fa fa-envelope" aria-hidden="true"></i>{{' Mail: ' + children.mail}}
+                                        <hr>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div *ngIf="children.fotoFachada != null">
+                                            <a href="{{ URLDocs + '/partidas/' + children.fotoFachada }}" data-lightbox="image" data-title="Fachada de Taller" style="width:80px; height: 80px;" class="instructivo">
+                                                <img src="{{ URLDocs + '/partidas/' + children.fotoFachada }}" style="width:80px;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" class="btn btn-xs btn-primary pull-right" [routerLink]="['../nuevasucursal', employee.data.idProveedorEncabezado, children.idProveedor]">Editar</button>
+                                        <button type="button" class="btn btn-xs btn-danger pull-right" (click)="eliminarSucursal(children)" >Eliminar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </dx-data-grid>
+        </div>
+    </div>
+    <!--===================================================-->
+    <!-- End Striped Table -->
+</div>
+<a #btnOpen (click)="mdModal.open()"></a>
+<p-confirmDialog header="Alerta" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>
+
+<modal #mdModal title="Expediente Electrónico del Proveedor" modalClass="modal-lg" [hideCloseButton]="false" [closeOnEscape]="false" [closeOnOutsideClick]="false" (onOpen)="onOpenExpediente()">
+    <modal-header>
+        Agregar Documentos.
+    </modal-header>
+    <modal-content>
+        <div class="row">
+            <div class="col-xs-12">
+                <form [formGroup]="frmExpediente" class="form-horizontal" (ngSubmit)="saveDocument(frmExpediente.value)">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Tipo Documento</label>
+                        <div class="col-md-9">
+                            <p-dropdown [options]="documentosDDL" [formControl]="frmExpediente.controls['idDocumento']" placeholder="Seleccione el documento" [filter]="true" [style]="{'width':'400px'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="form-group" [ngClass]="{'has-error':!frmExpediente.controls['folio'].valid && frmExpediente.controls['folio'].touched}">
+                        <label class="col-sm-3 control-label">Folio</label>
+                        <div class="col-sm-3">
+                            <input type="text" placeholder="Ingrese un folio" class="form-control" [formControl]="frmExpediente.controls['folio']">
+                            <div class="alert alert-danger" *ngIf="!frmExpediente.controls['folio'].valid && frmExpediente.controls['folio'].touched">Debe introducir un folio.</div>
+                        </div>
+                    </div>
+                    <div class="form-group" [ngClass]="{'has-error':!frmExpediente.controls['vigencia'].valid && frmExpediente.controls['vigencia'].touched}">
+                        <label class="col-sm-3 control-label">Vigencia</label>
+                        <div class="col-sm-9">
+                            <p-calendar [formControl]="frmExpediente.controls['vigencia']" dateFormat="mm-dd-yy"></p-calendar>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3"></div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <div class="col-sm-12">
+                                    <p-fileUpload name="documento[]" url="{{ URL + 'file/upload'}}" (onUpload)="onUpload($event)" multiple="false" accept=".pdf,image/*" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Cargar Documento" cancelLabel="Cancelar" auto="true">
+                                        <ng-template pTemplate="content">
+                                            <ul *ngIf="uploadedDoc.length">
+                                                <li *ngFor="let file of uploadedDoc">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploaded(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                                                </li>
+                                            </ul>
+                                        </ng-template>
+                                    </p-fileUpload>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button #btnClose class="btn btn-default" type="button" (click)="mdModal.close(); frmExpediente.reset();">Cancelar</button>
+                        <button class="btn btn-primary" type="submit" [disabled]="!frmExpediente.valid">Agregar Documento</button>
+                    </div>
+                </form>
+                <br>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p-dataTable [value]="documentos" sortMode="multiple" reorderableColumns="false" [globalFilter]="gb">
+                            <p-column field="descripcion" header="Documento" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+                            <p-column field="folio" header="Folio" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+                            <p-column field="vigenciaTXT" header="Vigencia" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+                            <p-column field="fechaCargaTXT" header="Fecha Carga" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+                            <p-column [style]="{'width':'100px'}">
+                                <ng-template pTemplate="header">
+                                    Link
+                                </ng-template>
+                                <ng-template let-doc="rowData" pTemplate="body">
+                                    <div class="instructivoContent">
+                                        <a href="{{ URLDocs + '/partidas/' +doc.archivo }}" class="instructivo" download><i class="fa fa-file-pdf-o insIcon" aria-hidden="true"></i></a>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                            <!-- <p-column styleClass="col-button" [style]="{'width':'100px'}">
+                                <ng-template pTemplate="header">
+                                    Acción
+                                </ng-template>
+                                <ng-template let-par="rowData" pTemplate="body">
+                                    <button class="btn btn-default btn-icon btn-circle" (click)="openEditar(par)" pTooltip="Editar" tooltipPosition="top"><i class="fa fa-pencil"></i></button>
+                                    <button class="btn btn-default btn-icon btn-circle" (click)="eliminarUnidad(par)" pTooltip="Eliminar" tooltipPosition="top"><i class="fa fa-trash-o"></i></button>
+                                </ng-template>
+                            </p-column> -->
+                        </p-dataTable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </modal-content>
+</modal>
+
+<modal #mdCuenta title="Datos de Acceso" modalClass="modal-xs" [hideCloseButton]="false" [closeOnEscape]="false" [closeOnOutsideClick]="false">
+    <modal-header>
+        Acceso a Proveedores
+    </modal-header>
+    <modal-content>
+        <div class="row">
+            <div class="col-xs-12">
+                <form [formGroup]="frmAcceso" class="form-horizontal" (ngSubmit)="sendCuenta(frmAcceso.value)">
+                    <div class="form-group" [ngClass]="{'has-error': !frmAcceso.controls['nombre'].valid && frmAcceso.controls['nombre'].touched}">
+                        <label class="col-sm-3 control-label">Nombre de Contacto</label>
+                        <div class="col-sm-6">
+                            <input type="text" placeholder="Ingrese un nombre de contacto" class="form-control" [formControl]="frmAcceso.controls['nombre']">
+                            <div class="alert alert-danger" *ngIf="!frmAcceso.controls['nombre'].valid && frmAcceso.controls['nombre'].touched">Debe introducir un nombre de usuario.</div>
+                        </div>
+                    </div>
+                    <div class="form-group" [ngClass]="{'has-error': !frmAcceso.controls['mail'].valid && frmAcceso.controls['mail'].touched}">
+                        <label class="col-sm-3 control-label">Mail</label>
+                        <div class="col-sm-6">
+                            <input type="text" placeholder="Ingrese un correo de contacto" class="form-control" [formControl]="frmAcceso.controls['mail']">
+                            <div class="alert alert-danger" *ngIf="!frmAcceso.controls['mail'].valid && frmAcceso.controls['mail'].touched">Debe introducir un correo de contacto.</div>
+                        </div>
+                    </div>
+                    <div class="form-group" [ngClass]="{'has-error': !frmAcceso.controls['usuario'].valid && frmAcceso.controls['usuario'].touched}">
+                        <label class="col-sm-3 control-label">Usuario</label>
+                        <div class="col-sm-6">
+                            <input type="text" placeholder="Ingrese un usuario" class="form-control" [formControl]="frmAcceso.controls['usuario']">
+                            <div class="alert alert-danger" *ngIf="!frmAcceso.controls['usuario'].valid && frmAcceso.controls['usuario'].touched">Debe introducir un usuario.</div>
+                        </div>
+                    </div>
+                    <div class="form-group" [ngClass]="{'has-error': !frmAcceso.controls['password'].valid && frmAcceso.controls['password'].touched}">
+                        <label class="col-sm-3 control-label">Password</label>
+                        <div class="col-sm-6">
+                            <input type="text" placeholder="Ingrese un nombre de contacto" class="form-control" [formControl]="frmAcceso.controls['password']">
+                            <div class="alert alert-danger" *ngIf="!frmAcceso.controls['password'].valid && frmAcceso.controls['password'].touched">Debe introducir un password.</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button #btnCloseCuenta class="btn btn-default" type="button" (click)="mdCuenta.close(); frmAcceso.reset();">Cancelar</button>
+                        <button class="btn btn-primary" type="submit" [disabled]="!frmAcceso.valid">Enviar Acceso</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </modal-content>
+</modal>

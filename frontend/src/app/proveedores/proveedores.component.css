@@ -1,0 +1,42 @@
+.deleteLink{
+    color: #a00404 !important;
+    cursor: pointer;
+}
+
+.instructivoContent{
+    width: 100% !important;
+    text-align: center !important;
+}
+
+.instructivo{
+    cursor: pointer;
+}
+
+.insIcon{
+    font-size: 25px;
+    color: cornflowerblue;
+}
+
+/deep/ #gridContainer {
+    height: 900px;
+}
+
+.dx-tile-content .price {
+    font-size: 8px;
+    position: absolute;
+    background-color: black;
+    color: white;
+    opacity: 0.6;
+    padding: 2px;
+    left: 9px;
+    top: 9px;
+}
+
+.dx-tile-content .image {
+    height: 80%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    padding: 5px;
+    display: block;
+}

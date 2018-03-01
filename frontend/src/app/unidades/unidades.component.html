@@ -1,0 +1,261 @@
+<div id="page-title">
+    <h1 class="page-header text-overflow">Tipos de Unidades</h1>
+</div>
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+
+    <!-- Basic Data Tables -->
+    <!--===================================================-->
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Catálogo</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <a #btnOpen class="btn btn-warning btn-labeled fa fa-plus pull-right" (click)="mdModelo.open()">Nueva Unidad</a>
+                    <a class="btn btn-default btn-labeled fa fa-plus pull-right" (click)="mdSubMarca.open()">Nueva SubMarca</a>
+                    <a class="btn btn-default btn-labeled fa fa-plus pull-right" (click)="mdMarca.open()">Nueva Marca</a>
+                    <!-- <button class="btn btn-primary btn-labeled fa fa-file-o pull-right" (click)="dt.exportCSV()">Exportar</button> -->
+                </div>
+            </div>
+            <br>
+            <!-- <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input #gb type="text" pInputText size="50" placeholder="Filtro global" />
+            </div>
+            <p-dataTable [value]="unidades" [rows]="10" [paginator]="true" [pageLinks]="5" [rowsPerPageOptions]="[10,50,100]" sortMode="multiple"
+                scrollable="true" scrollWidth="100%" reorderableColumns="true" [responsive]="true" [globalFilter]="gb" #dt exportFilename="TiposUnidad">
+                <p-header>Hay <b>{{ unidades.length }}</b> Tipos de Unidad</p-header>
+                <p-column *ngFor="let col of colsUnidad" [field]="col.field" [header]="col.header" [style]="{'width': col.width }" [sortable]="true"
+                    [filter]="true" filterPlaceholder="Buscar"></p-column>
+                <p-column [style]="{'width': '150px' }">
+                    <ng-template pTemplate="header">
+                        Foto
+                    </ng-template>
+                    <ng-template let-uni="rowData" pTemplate="body">
+                        <div class="fotoContent" [hidden]="uni.foto == null || uni.foto == '' ">
+                            <a href="{{ URLDocs + 'partidas/' + uni.foto }}" data-lightbox="image" data-title="Foto Partida" class="instructivo">
+                                <img src="{{ URLDocs + 'partidas/' + uni.foto }}" class="fotoUnidad">
+                            </a>
+                        </div>
+                    </ng-template>
+                </p-column>
+                <p-column styleClass="col-button" [style]="{'width': '100px' }">
+                    <ng-template pTemplate="header">
+                        Acción
+                    </ng-template>
+                    <ng-template let-uni="rowData" pTemplate="body">
+                        <button class="btn btn-default btn-icon btn-circle" (click)="openEditar(uni)" pTooltip="Editar" tooltipPosition="top"><i class="fa fa-pencil"></i></button>
+                        <button class="btn btn-default btn-icon btn-circle" (click)="eliminarUnidad(uni)" pTooltip="Eliminar" tooltipPosition="top"><i class="fa fa-trash-o"></i></button>
+                    </ng-template>
+                </p-column>
+            </p-dataTable> -->
+
+            <dx-data-grid [dataSource]="unidades"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [showBorders]="false"
+                [rowAlternationEnabled]="true"
+                [allowColumnReordering]="false" 
+                [allowColumnResizing]="true" 
+                [columnAutoWidth]="true"
+                (onExporting)="onExporting($event)" (onExported)="onExported($event)">
+                <dxo-export [enabled]="true" fileName="TipoUnidad"></dxo-export>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <dxo-header-filter [visible]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+
+                <dxi-column dataField="idUnidad" caption="ID" [width]="70"  [filterOperations]="['contains']"></dxi-column>
+                <dxi-column dataField="tipoCombustible"></dxi-column>
+                <dxi-column dataField="tipoUnidad"></dxi-column>
+                <dxi-column dataField="marca"></dxi-column>
+                <dxi-column dataField="subMarca" ></dxi-column>
+                <dxi-column dataField="cilindros"></dxi-column>
+                
+                <dxi-column dataField="idUnidad" caption="Foto" cellTemplate="fotoTemplate"></dxi-column>
+                <div *dxTemplate="let uni of 'fotoTemplate'" class="fotoContent" [hidden]="uni.data.foto == null || uni.data.foto == '' ">
+                    <a href="{{ URLDocs + '/partidas/' + uni.data.foto }}" data-lightbox="image" data-title="Foto Partida" class="instructivo">
+                        <img src="{{ URLDocs + '/partidas/' + uni.data.foto }}" class="fotoUnidad">
+                    </a>
+                </div>
+                
+
+                <dxi-column dataField="idUnidad" caption="Acción" cellTemplate="detailTemplate" [width]="100"></dxi-column>
+                <div *dxTemplate="let suc of 'detailTemplate'">
+                    <button class="btn btn-primary btn-icon btn-circle" (click)="openEditar(suc.data)" pTooltip="Editar" tooltipPosition="top"><i class="fa fa-pencil"></i></button>
+                    <button class="btn btn-default btn-icon btn-circle" (click)="eliminarUnidad(suc.data)" pTooltip="Eliminar" tooltipPosition="top"><i class="fa fa-ban"></i></button>
+                </div>
+
+                <dxo-pager [showInfo]="true" infoText="Se han encontrado {2} registros" [showNavigationButtons]="true" [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]">
+                </dxo-pager>
+            </dx-data-grid>
+        </div>
+    </div>
+    <!--===================================================-->
+    <!-- End Striped Table -->
+</div>
+
+<p-confirmDialog header="Alerta" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>
+
+<!--Modal de Marcas-->
+<modal #mdMarca title="Catálogo de Marcas" cancelButtonLabel="Cerrar" modalClass="modal-lg modal-sm any-other-css-class"
+    [hideCloseButton]="false" [closeOnEscape]="false" [closeOnOutsideClick]="false" (onOpen)="onOpenMarca()">
+    <modal-header>
+        Agregar o quitar marcas de unidades.
+    </modal-header>
+    <modal-content>
+        <div class="row">
+            <div class="col-xs-12">
+                <form [formGroup]="frmMarca" class="form-inline" (ngSubmit)="saveMarca(frmMarca.value)">
+                    <div class="form-group" [ngClass]="{'has-error':!frmMarca.controls['marca'].valid && frmMarca.controls['marca'].touched}">
+                        <input type="text" placeholder="Ingrese la marca" class="form-control" [formControl]="frmMarca.controls['marca']">
+                        <!--<div class="alert alert-danger" *ngIf="!frmMarca.controls['marca'].valid && frmMarca.controls['marca'].touched">You must select a gender.</div>-->
+                        <!--<div class="alert alert-danger" *ngIf="frmMarca.controls['marca'].hasError('maxlength') && frmMarca.controls['marca'].touched" >Your last name cannot exceed 10 characters.</div>-->
+                    </div>
+                    <button class="btn btn-primary" type="submit" [disabled]="!frmMarca.valid">Agregar Marca</button>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <p-dataTable [value]="marcas" [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" sortMode="multiple"
+                resizableColumns="true" reorderableColumns="true" [responsive]="true" [globalFilter]="gb">
+                <p-column *ngFor="let col of colsMarca" [field]="col.field" [header]="col.header" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+                <p-column styleClass="col-button">
+                    <ng-template pTemplate="header">
+                        Eliminar
+                    </ng-template>
+                    <ng-template let-marca="rowData" pTemplate="body">
+                        <button class="btn btn-default btn-icon btn-circle" (click)="eliminarMarca(marca)" pTooltip="Eliminar" tooltipEvent="focus"
+                            tooltipPosition="top"><i class="fa fa-trash-o"></i></button>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+    </modal-content>
+
+</modal>
+
+<!--Modal de SubMarcas-->
+<modal #mdSubMarca title="Catálogo de SubMarcas" cancelButtonLabel="Cerrar" modalClass="modal-lg modal-sm any-other-css-class"
+    [hideCloseButton]="false" [closeOnEscape]="false" [closeOnOutsideClick]="false" (onOpen)="onOpenSubMarca()">
+    <modal-header>
+        Agregar o quitar submarcas de unidades.
+    </modal-header>
+    <modal-content>
+        <div class="row">
+            <div class="col-xs-12">
+                <form [formGroup]="frmSubMarca" class="form-horizontal" (ngSubmit)="saveSubMarca(frmSubMarca.value)">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="demo-text-input">Seleccione Marca</label>
+                        <div class="col-md-9">
+                            <p-dropdown [options]="marcasDDL" [formControl]="frmSubMarca.controls['idMarca']" placeholder="Seleccione una marca" [filter]="true"
+                                [style]="{'width':'250px'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="form-group" [ngClass]="{'has-error':!frmSubMarca.controls['subMarca'].valid && frmSubMarca.controls['subMarca'].touched}">
+                        <label class="col-md-3 control-label" for="demo-text-input">SubMarca</label>
+                        <div class="col-md-5">
+                            <input type="text" placeholder="Ingrese la sub marca" class="form-control" [formControl]="frmSubMarca.controls['subMarca']">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary pull-right" type="submit" [disabled]="!frmSubMarca.valid">Agregar SubMarca</button>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <p-dataTable [value]="submarcas" [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" sortMode="multiple"
+                resizableColumns="true" reorderableColumns="true" [responsive]="true" [globalFilter]="gb">
+                <p-column *ngFor="let col of colsSubMarca" [field]="col.field" [header]="col.header" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+                <p-column styleClass="col-button">
+                    <ng-template pTemplate="header">
+                        Eliminar
+                    </ng-template>
+                    <ng-template let-submarca="rowData" pTemplate="body">
+                        <button class="btn btn-default btn-icon btn-circle" (click)="eliminarSubMarca(submarca)" pTooltip="Eliminar" tooltipEvent="focus"
+                            tooltipPosition="top"><i class="fa fa-trash-o"></i></button>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+    </modal-content>
+</modal>
+
+
+<!--Modal de Modelos-->
+<modal #mdModelo title="Catálogo de Unidades" modalClass="modal-md" [hideCloseButton]="false" [closeOnEscape]="false" [closeOnOutsideClick]="false"
+    (onOpen)="onOpenModelo()">
+    <modal-header>
+        Agregar Unidades.
+    </modal-header>
+    <modal-content>
+        <div class="row">
+            <div class="col-xs-12">
+                <form [formGroup]="frmUnidad" class="form-horizontal" (ngSubmit)="saveUnidad(frmUnidad.value)">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">TipoCombustible/SinMotor</label>
+                        <div class="col-md-8">
+                            <p-dropdown [options]="tiposCombustible" [formControl]="frmUnidad.controls['idTipoCombustible']" placeholder="Seleccione..."
+                                [filter]="true" [style]="{'width':'350px'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Clase</label>
+                        <div class="col-md-8">
+                            <p-dropdown [options]="tiposDDL" [formControl]="frmUnidad.controls['idTipoUnidad']" placeholder="Seleccione..." [filter]="true"
+                                [style]="{'width':'350px'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Seleccione SubMarca</label>
+                        <div class="col-md-8">
+                            <p-dropdown [options]="submarcasDDL" [formControl]="frmUnidad.controls['idSubMarca']" placeholder="Seleccione..." [filter]="true"
+                                [style]="{'width':'350px'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Seleccione Cilindros</label>
+                        <div class="col-md-8">
+                            <p-dropdown [options]="cilindrosDDL" [formControl]="frmUnidad.controls['idCilindros']" placeholder="Seleccione..." [filter]="true"
+                                [style]="{'width':'350px'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="!frmUnidad.controls['idUnidad'].value != null">
+                        <label class="col-sm-4 control-label">Foto de la Unidad</label>
+                        <div class="col-sm-8">
+                            <img src="{{ URLDocs + '/partidas/' + frmUnidad.controls['foto'].value }}" class="fotoUnidad" alt="Foto de la unidad">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Cargar Foto</label>
+                        <div class="col-sm-8">
+                            <p-fileUpload name="foto[]" url="{{URL + 'file/upload'}}" (onUpload)="onUpload($event)" multiple="false"
+                                accept="image/*" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Seleccionar" cancelLabel="Cancelar"
+                                auto="true">
+                                <ng-template pTemplate type="content">
+                                    <ul *ngIf="uploaded.length">
+                                        <li *ngFor="let file of uploaded">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploaded(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                                        </li>
+                                    </ul>
+                                </ng-template>
+                            </p-fileUpload>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button #btnClose class="btn btn-default" type="button" (click)="mdModelo.close(); frmUnidad.reset();">Cancelar</button>
+                        <button class="btn btn-primary" type="submit" *ngIf="frmUnidad.controls['idUnidad'].value == null" [disabled]="!frmUnidad.valid">Agregar Unidad</button>
+                        <button class="btn btn-warning" type="submit" *ngIf="frmUnidad.controls['idUnidad'].value != null" [disabled]="!frmUnidad.valid">Actualizar Unidad</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </modal-content>
+</modal>

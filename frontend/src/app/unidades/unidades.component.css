@@ -1,0 +1,17 @@
+.fotoUnidad{
+    width: 110px !important;
+}
+
+.fotoContent{
+    width: 100% !important;
+    text-align: center !important;
+}
+
+.deleteLink{
+    color: #a00404 !important;
+    cursor: pointer;
+}
+
+.instructivo{
+    cursor: pointer;
+}

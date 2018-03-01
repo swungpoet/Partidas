@@ -1,0 +1,494 @@
+<div id="page-title">
+  <h1 class="page-header text-overflow">Parque Vehicular Autorizado</h1>
+</div>
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+
+  <!-- Basic Data Tables -->
+  <!--===================================================-->
+  <div class="panel">
+    <div class="panel-heading">
+      <h3 class="panel-title">Catálogo</h3>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-xs-12">
+          <a #btnOpen class="btn btn-warning btn-labeled fa fa-plus pull-right" (click)="mdModelo.open()">Agregar Vehículo</a>
+        </div>
+      </div>
+      <br>
+      <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+        <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+        <input #gb type="text" pInputText size="50" placeholder="Filtro global" />
+      </div>
+      <p-dataTable [value]="unidades" [rows]="10" [paginator]="true" [pageLinks]="5" [rowsPerPageOptions]="[10,50,100]" sortMode="multiple"
+        scrollable="true" scrollWidth="100%" reorderableColumns="true" [responsive]="true" [globalFilter]="gb" #dt exportFilename="TiposUnidad">
+        <p-header>Hay <b>{{ unidades.length }}</b> Unidades</p-header>
+        <p-column *ngFor="let col of colsUnidad" [field]="col.field" [header]="col.header" [style]="{'width': col.width }" [sortable]="true"
+          [filter]="true" filterPlaceholder="Buscar"></p-column>
+        <p-column [style]="{'width': '120px' }">
+          <ng-template pTemplate="header">
+            Foto Frente
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <div class="fotoContent" *ngIf="uni.frente != null">
+              <a href="{{ URLDocs + '/partidas/' + uni.frente }}" data-lightbox="image" data-title="Foto Frente" class="instructivo">
+                  <img src="{{ URLDocs + '/partidas/' + uni.frente }}" class="fotoUnidad">
+              </a>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '120px' }">
+          <ng-template pTemplate="header">
+            Foto Derecha
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <div class="fotoContent" *ngIf="uni.derecho != null">
+              <a href="{{ URLDocs + '/partidas/' + uni.derecho }}" data-lightbox="image" data-title="Foto Derecha" class="instructivo">
+                  <img src="{{ URLDocs + '/partidas/' + uni.derecho }}" class="fotoUnidad">
+              </a>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '120px' }">
+          <ng-template pTemplate="header">
+            Foto Izquierda
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <div class="fotoContent" *ngIf="uni.izquierdo != null">
+              <a href="{{ URLDocs + '/partidas/' + uni.izquierdo }}" data-lightbox="image" data-title="Foto Izquierda" class="instructivo">
+                  <img src="{{ URLDocs + '/partidas/' + uni.izquierdo }}" class="fotoUnidad">
+              </a>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '120px' }">
+          <ng-template pTemplate="header">
+            Foto Atrás
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <div class="fotoContent" *ngIf="uni.atras != null">
+              <a href="{{ URLDocs + '/partidas/' + uni.atras }}" data-lightbox="image" data-title="Foto Atrás" class="instructivo">
+                  <img src="{{ URLDocs + '/partidas/' + uni.atras }}" class="fotoUnidad">
+              </a>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '120px' }">
+          <ng-template pTemplate="header">
+            Tarjeta Circulación
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <div class="fotoContent" *ngIf="uni.tarjeta != null">
+              <a href="{{ URLDocs + '/partidas/' + uni.tarjeta }}" data-lightbox="image" data-title="Foto Tarjeta Circulación"
+                class="instructivo">
+                  <img src="{{ URLDocs + '/partidas/' + uni.tarjeta }}" class="fotoUnidad">
+              </a>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '120px' }">
+          <ng-template pTemplate="header">
+            PLaca VIN
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <div class="fotoContent" *ngIf="uni.placavin != null">
+              <a href="{{ URLDocs + '/partidas/' + uni.placavin }}" data-lightbox="image" data-title="Placa VIN" class="instructivo">
+                  <img src="{{ URLDocs + '/partidas/' + uni.placavin }}" class="fotoUnidad">
+              </a>
+            </div>
+          </ng-template>
+        </p-column>
+        <!-- VERIFICACION AMBIENTAL -->
+        <p-column [style]="{'width': '120px' }">
+          <ng-template pTemplate="header">
+            Verificación Ambiental
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <div class="fotoContent" *ngIf="uni.verificacionAmbiental != null" [ngClass]="{'fechaVencida': esVencida(uni.fechaVencimientoVerificacionAmbiental)}">
+              <a href="{{ URLDocs + '/partidas/' + uni.verificacionAmbiental }}" data-lightbox="image" data-title="Verificación Ambiental"
+                class="instructivo">
+                  <img src="{{ URLDocs + '/partidas/' + uni.verificacionAmbiental }}" class="fotoUnidad">
+              </a>
+              <br>
+              <label class="label-sm text-muted">Vence: <br> {{uni.fechaVencimientoVerificacionAmbiental | date:'dd/MM/yyyy'}}</label>
+            </div>
+          </ng-template>
+        </p-column>
+        <!-- VERIFICACION FISICO MECANICA -->
+        <p-column [style]="{'width': '120px' }">
+          <ng-template pTemplate="header">
+            Verificación Físico/Mecánica
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <div class="fotoContent" *ngIf="uni.verificacionFisicoMecanica != null" [ngClass]="{'fechaVencida': esVencida(uni.fechaVencimientoVerificacionFisicoMecanica)}">
+              <a href="{{ URLDocs + '/partidas/' + uni.verificacionFisicoMecanica }}" data-lightbox="image" data-title="Verificación Físico/Mecánica"
+                class="instructivo">
+                  <img src="{{ URLDocs + '/partidas/' + uni.verificacionFisicoMecanica }}" class="fotoUnidad">
+              </a>
+              <br>
+              <label class="label-sm text-muted">Vence: <br> {{uni.fechaVencimientoVerificacionFisicoMecanica | date:'dd/MM/yyyy'}}</label>
+            </div>
+          </ng-template>
+        </p-column>
+        <!-- REFRENDO -->
+        <p-column [style]="{'width': '120px' }">
+          <ng-template pTemplate="header">
+            Refrendo
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <div class="fotoContent" *ngIf="uni.refrendo != null" [ngClass]="{'fechaVencida': esVencida(uni.fechaVencimientoRefrendo)}">
+              <a href="{{ URLDocs + '/partidas/' + uni.refrendo }}" data-lightbox="image" data-title="Refrendo"
+                class="instructivo">
+                  <img src="{{ URLDocs + '/partidas/' + uni.refrendo }}" class="fotoUnidad">
+              </a>
+              <br>
+              <label class="label-sm text-muted">Vence: <br> {{uni.fechaVencimientoRefrendo | date:'dd/MM/yyyy'}}</label>
+            </div>
+          </ng-template>
+        </p-column>
+        <!-- TENENCIA -->
+        <p-column [style]="{'width': '120px' }">
+          <ng-template pTemplate="header">
+            Tenencia
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <div class="fotoContent" *ngIf="uni.tenencia != null" [ngClass]="{'fechaVencida': esVencida(uni.fechaVencimientoTenencia)}">
+              <a href="{{ URLDocs + '/partidas/' + uni.tenencia }}" data-lightbox="image" data-title="Tenencia"
+                class="instructivo">
+                  <img src="{{ URLDocs + '/partidas/' + uni.tenencia }}" class="fotoUnidad">
+              </a>
+              <br>
+              <label class="label-sm text-muted">Vence: <br> {{uni.fechaVencimientoTenencia | date:'dd/MM/yyyy'}}</label>
+            </div>
+          </ng-template>
+        </p-column>
+
+
+
+        <p-column [style]="{'width':'120px'}">
+          <ng-template pTemplate="header">
+            REPUVE
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <div class="fotoContent">
+              <a href="{{ URLDocs + '/partidas/' + uni.repuve }}" class="instructivo" download><i class="fa fa-file-pdf-o insIcon" aria-hidden="true"></i></a>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width':'120px'}">
+          <ng-template pTemplate="header">
+            Comprobante Autorización
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <div class="fotoContent">
+              <a href="{{ URLDocs + '/partidas/' + uni.autorizacion }}" class="instructivo" download><i class="fa fa-file-pdf-o insIcon" aria-hidden="true"></i></a>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column styleClass="col-button" [style]="{'width':'80px'}">
+          <ng-template pTemplate="header">
+            Acción
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <button class="btn btn-default btn-icon btn-circle" (click)="openEditar(uni)" pTooltip="Editar" tooltipPosition="top"><i class="fa fa-pencil"></i></button>
+            <button class="btn btn-default btn-icon btn-circle" (click)="eliminarVerificacion(uni)" pTooltip="Eliminar" tooltipPosition="top"><i class="fa fa-trash-o"></i></button>
+          </ng-template>
+        </p-column>
+      </p-dataTable>
+    </div>
+  </div>
+  <!--===================================================-->
+  <!-- End Striped Table -->
+</div>
+
+<p-confirmDialog header="Alerta" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>
+
+<!--Modal de Modelos-->
+<modal #mdModelo title="Nueva Unidad (Si tiene duda o no se encuentra algún campo favor de comunicarse a los siguientes números: )"
+  modalClass="modal-lg" [hideCloseButton]="false" [closeOnEscape]="false" [closeOnOutsideClick]="false" (onOpen)="onOpenModelo()">
+  <modal-header>
+    <br> Francisco Velazquez (55) 7480-3686
+    <br> Cristino Estrada (55) 5494-5181
+    <br> Central de Operaciones 01 800 0220901 <br>
+  </modal-header>
+  <modal-content>
+    <div class="row">
+      <div class="col-xs-12">
+        <form [formGroup]="frmUnidad" class="form-horizontal" (ngSubmit)="saveUnidad(frmUnidad.value)">
+          <div class="form-group">
+            <label class="col-md-4 control-label">Seleccione Sucursal</label>
+            <div class="col-md-8">
+              <p-dropdown [options]="sucursalesDDL" [formControl]="frmUnidad.controls['idSucursal']" placeholder="Seleccione..." [filter]="true"
+                [style]="{'width':'570px'}" (onChange)="SetSucursal()">
+              </p-dropdown>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label">Seleccione Unidad Operativa</label>
+            <div class="col-md-8">
+              <p-dropdown [options]="ouDDL" [formControl]="frmUnidad.controls['idUnidadOperativa']" placeholder="Seleccione..." [filter]="true"
+                [style]="{'width':'570px'}">
+              </p-dropdown>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label">Seleccione Tipo de Unidad</label>
+            <div class="col-md-8">
+              <p-dropdown [options]="unidadesDDL" [formControl]="frmUnidad.controls['idTipoUnidad']" placeholder="Seleccione..." [filter]="true" [readonly]="frmUnidad.controls['idUnidad'].value==null?false:true"
+                [style]="{'width':'570px'}">
+              </p-dropdown>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="demo-text-input">Número Económico (cargar el número sin espacios y letras en mayúsculas)</label>
+            <div class="col-md-7">
+              <input type="text" placeholder="" class="form-control" [formControl]="frmUnidad.controls['numeroEconomico']" [readonly]="frmUnidad.controls['idUnidad'].value==null?false:true">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="demo-text-input">VIN (cargar el número sin espacios y letras en mayúsculas)</label>
+            <div class="col-md-7">
+              <input type="text" placeholder="" class="form-control" [formControl]="frmUnidad.controls['vin']">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="demo-text-input">Placas (cargar el número sin espacios y letras en mayúsculas)</label>
+            <div class="col-md-7">
+              <input type="text" placeholder="" class="form-control" [formControl]="frmUnidad.controls['placas']">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-md-4 control-label" for="demo-text-input">Modelo</label>
+            <div class="col-md-7">
+              <p-dropdown [options]="modelosDDL" [formControl]="frmUnidad.controls['modelo']" placeholder="Seleccione..." [filter]="true"
+                [style]="{'width':'150px'}">
+              </p-dropdown>
+            </div>
+          </div>
+
+          <!-- 
+            FOTO de PLACA DE IDENTIFICACIÓN
+            
+            <div class="form-group" *ngIf="!frmUnidad.controls['frente'] != null">
+            <label class="col-sm-4 control-label">Foto Frente</label>
+            <div class="col-sm-8">
+              <img src="{{ URL + '/partidas/' + frmUnidad.controls['foto'].value }}" class="fotoUnidad" alt="Foto de la unidad">
+            </div>
+          </div> -->
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Cargar Foto Frente</label>
+            <div class="col-sm-7">
+              <p-fileUpload name="fotoFR[]" url="{{URL + 'file/upload'}}" (onUpload)="onUploadFR($event)" multiple="false"
+                accept="image/*" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Seleccionar" cancelLabel="Cancelar"
+                auto="auto">
+                <ng-template pTemplate="content">
+                  <ul *ngIf="uploadedFR.length">
+                    <li *ngFor="let file of uploadedFR">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploadedFR(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                    </li>
+                  </ul>
+                </ng-template>
+              </p-fileUpload>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Cargar Foto Derecho</label>
+            <div class="col-sm-7">
+              <p-fileUpload name="fotoDE[]" url="{{URL + 'file/upload'}}" (onUpload)="onUploadDE($event)" multiple="false"
+                accept="image/*" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Seleccionar" cancelLabel="Cancelar"
+                auto="true">
+                <ng-template pTemplate="content">
+                  <ul *ngIf="uploadedDE.length">
+                    <li *ngFor="let file of uploadedDE">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploadedDE(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                    </li>
+                  </ul>
+                </ng-template>
+              </p-fileUpload>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Cargar Foto Atrás</label>
+            <div class="col-sm-7">
+              <p-fileUpload name="fotoAT[]" url="{{URL + 'file/upload'}}" (onUpload)="onUploadAT($event)" multiple="false"
+                accept="image/*" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Seleccionar" cancelLabel="Cancelar"
+                auto="true">
+                <ng-template pTemplate="content">
+                  <ul *ngIf="uploadedAT.length">
+                    <li *ngFor="let file of uploadedAT">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploadedAT(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                    </li>
+                  </ul>
+                </ng-template>
+              </p-fileUpload>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Cargar Foto Izquierda</label>
+            <div class="col-sm-7">
+              <p-fileUpload name="fotoIZ[]" url="{{URL + 'file/upload'}}" (onUpload)="onUploadIZ($event)" multiple="false"
+                accept="image/*" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Seleccionar" cancelLabel="Cancelar"
+                auto="true">
+                <ng-template pTemplate="content">
+                  <ul *ngIf="uploadedIZ.length">
+                    <li *ngFor="let file of uploadedIZ">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploadedIZ(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                    </li>
+                  </ul>
+                </ng-template>
+              </p-fileUpload>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Cargar Tarjeta de Circulación</label>
+            <div class="col-sm-7">
+              <p-fileUpload name="fotoTA[]" url="{{URL + 'file/upload'}}" (onUpload)="onUploadTA($event)" multiple="false"
+                accept="image/*" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Seleccionar" cancelLabel="Cancelar"
+                auto="true">
+                <ng-template pTemplate="content">
+                  <ul *ngIf="uploadedTA.length">
+                    <li *ngFor="let file of uploadedTA">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploadedTA(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                    </li>
+                  </ul>
+                </ng-template>
+              </p-fileUpload>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Cargar Placa VIN</label>
+            <div class="col-sm-7">
+              <p-fileUpload name="fotoVI[]" url="{{URL + 'file/upload'}}" (onUpload)="onUploadVI($event)" multiple="false"
+                accept="image/*" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Seleccionar" cancelLabel="Cancelar"
+                auto="true">
+                <ng-template pTemplate="content">
+                  <ul *ngIf="uploadedVI.length">
+                    <li *ngFor="let file of uploadedVI">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploadedVI(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                    </li>
+                  </ul>
+                </ng-template>
+              </p-fileUpload>
+            </div>
+          </div>
+          <!-- VERIFICACION AMBIENTAL-->
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Cargar Verificación Ambiental</label>
+            <div class="col-sm-7">
+              <p-fileUpload name="fotoVA[]" url="{{URL + 'file/upload'}}" (onUpload)="onUploadVA($event)" multiple="false"
+                accept="image/*" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Seleccionar" cancelLabel="Cancelar"
+                auto="true">
+                <ng-template pTemplate="content">
+                  <ul *ngIf="uploadedVA.length">
+                    <li *ngFor="let file of uploadedVA">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploadedVA(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                    </li>
+                    <li>
+                      Fecha Vencimiento:
+                      <p-calendar [inputStyle]="{'width':'120px'}" dateFormat="dd-mm-yy" showIcon="true"
+                        icon="fa fa-calendar" [formControl]="frmUnidad.controls['fechaVencimientoVerificacionAmbiental']"></p-calendar>
+                    </li>
+                  </ul>
+                </ng-template>
+              </p-fileUpload>
+            </div>
+          </div>
+          <!-- VERIFICACION FISICO MECANICA-->
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Cargar Verificación Físico/Mecánica</label>
+            <div class="col-sm-7">
+              <p-fileUpload name="fotoVFM[]" url="{{URL + 'file/upload'}}" (onUpload)="onUploadVFM($event)" multiple="false"
+                accept="image/*" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Seleccionar" cancelLabel="Cancelar"
+                auto="true">
+                <ng-template pTemplate="content">
+                  <ul *ngIf="uploadedVFM.length">
+                    <li *ngFor="let file of uploadedVFM">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploadedVFM(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                    </li>
+                    <li>
+                      Fecha Vencimiento:
+                      <p-calendar [inputStyle]="{'width':'120px'}" dateFormat="dd-mm-yy" showIcon="true"
+                        icon="fa fa-calendar" [formControl]="frmUnidad.controls['fechaVencimientoVerificacionFisicoMecanica']"></p-calendar>
+                    </li>
+                  </ul>
+                </ng-template>
+              </p-fileUpload>
+            </div>
+          </div>
+          <!-- REFRENDO-->
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Cargar Refrendo</label>
+            <div class="col-sm-7">
+              <p-fileUpload name="fotoREF[]" url="{{URL + 'file/upload'}}" (onUpload)="onUploadREF($event)" multiple="false"
+                accept="image/*" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Seleccionar" cancelLabel="Cancelar"
+                auto="true">
+                <ng-template pTemplate="content">
+                  <ul *ngIf="uploadedREF.length">
+                    <li *ngFor="let file of uploadedREF">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploadedREF(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                    </li>
+                    <li>
+                      Fecha Vencimiento:
+                      <p-calendar [inputStyle]="{'width':'120px'}" dateFormat="dd-mm-yy" showIcon="true"
+                        icon="fa fa-calendar" [formControl]="frmUnidad.controls['fechaVencimientoRefrendo']"></p-calendar>
+                    </li>
+                  </ul>
+                </ng-template>
+              </p-fileUpload>
+            </div>
+          </div>
+          <!-- TENENCIA -->
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Cargar Tenencia</label>
+            <div class="col-sm-7">
+              <p-fileUpload name="fotoVA[]" url="{{URL + 'file/upload'}}" (onUpload)="onUploadTEN($event)" multiple="false"
+                accept="image/*" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Seleccionar" cancelLabel="Cancelar"
+                auto="true">
+                <ng-template pTemplate="content">
+                  <ul *ngIf="uploadedTEN.length">
+                    <li *ngFor="let file of uploadedTEN">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploadedTEN(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                    </li>
+                    <li>
+                      Fecha Vencimiento:
+                      <p-calendar [inputStyle]="{'width':'120px'}" dateFormat="dd-mm-yy" showIcon="true"
+                        icon="fa fa-calendar" [formControl]="frmUnidad.controls['fechaVencimientoTenencia']"></p-calendar>
+                    </li>
+                  </ul>
+                </ng-template>
+              </p-fileUpload>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Cargar REPUVE</label>
+            <div class="col-sm-7">
+              <p-fileUpload name="fotoRE[]" url="{{URL + 'file/upload'}}" (onUpload)="onUploadRE($event)" multiple="false"
+                accept=".pdf" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Seleccionar" cancelLabel="Cancelar"
+                auto="true">
+                <ng-template pTemplate="content">
+                  <ul *ngIf="uploadedRE.length">
+                    <li *ngFor="let file of uploadedRE">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploadedRE(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                    </li>
+                  </ul>
+                </ng-template>
+              </p-fileUpload>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label">Cargar PDF Autorización</label>
+            <div class="col-sm-7">
+              <p-fileUpload name="fotoAU[]" url="{{URL + 'file/upload'}}" (onUpload)="onUploadAU($event)" multiple="false"
+                accept=".pdf" maxFileSize="10000000" uploadLabel="Cargar" chooseLabel="Seleccionar" cancelLabel="Cancelar"
+                auto="true">
+                <ng-template pTemplate="content">
+                  <ul *ngIf="uploadedAU.length">
+                    <li *ngFor="let file of uploadedAU">{{file.name}} - ({{file.size}} bytes) <a class="deleteLink" (click)="deleteUploadedAU(file)"><i class="fa fa-trash-o"></i>eliminar</a>
+                    </li>
+                  </ul>
+                </ng-template>
+              </p-fileUpload>
+            </div>
+          </div>
+          <div class="text-right">
+            <button #btnClose class="btn btn-default" type="button" (click)="mdModelo.close(); frmUnidad.reset();">Cancelar</button>
+            <button class="btn btn-primary" type="submit" [disabled]="!frmUnidad.valid">Agregar Unidad</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </modal-content>
+</modal>

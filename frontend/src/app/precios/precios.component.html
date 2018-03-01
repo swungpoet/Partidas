@@ -1,0 +1,538 @@
+<div id="page-title">
+  <h1 class="page-header text-overflow">Administración de precios del contrato</h1>
+</div>
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+  <div class="panel">
+    <div class="panel-heading">
+      <h3 class="panel-title">Establecer precio de venta</h3>
+    </div>
+    <div class="panel-body">
+
+      <br>
+      <div class="row">
+        <div class="col-xs-12 pull-left">
+          <div class="form-group">
+            <label class="col-md-2 control-label">Seleccione una unidad</label>
+
+            <div class="col-md-5">
+              <p-dropdown [options]="unidadesDDL" [(ngModel)]="selectedUnidad" placeholder="Seleccione una unidad" (onChange)="setUnidad()"
+                [filter]="true" [style]="{'width':'900px'}">
+              </p-dropdown>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <!-- <div class="row" *ngIf="selectedUnidad != null">
+        <div class="col-xs-6">
+          <div id="demo-weather-widget-lg" class="panel panel-info">
+            <div class="panel-body">
+              <div class="media pad-all bord-btm">
+                <div class="media-left">
+                  <img src="{{ URLDocs + unidad.foto }}" class="fotoUnidad" alt="Foto de la unidad">
+                </div>
+                <div class="media-body pad-lft">
+                  <h4 class="mar-no text-main">{{ unidad.marca + ' ' + unidad.subMarca }}</h4>
+                  <p>{{ unidad.tipoUnidad }}</p>
+                  <span class="text-sm text-muted">{{ unidad.anio }}</span>
+                  <span class="text-sm text-muted mar-lft">{{ unidad.version }}</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <br> -->
+      <div class="row" *ngIf="selectedUnidad != null">
+        <div class="col-xs-12">
+          <button #btnOpen class="btn btn-primary btn-labeled fa fa-floppy-o pull-right" (click)="saveProgress()">Guardar Precio de Venta</button>
+          <!-- <button class="btn btn-primary btn-labeled fa fa-file-o pull-right" (click)="dt.exportCSV()">Exportar</button> -->
+          <!-- <button class="btn btn-primary btn-labeled fa fa-file-o pull-right" (click)="export(dt)">Exportar</button> -->
+          <button #btnOpen class="btn btn-default btn-labeled fa fa-arrow-left pull-right" (click)="regresar()">Regresar</button>
+        </div>
+      </div>
+      <br>
+      <div class="row" *ngIf="selectedUnidad != null">
+        <div class="col-xs-12">
+          <button #btnOpen class="btn btn-info pull-right" (click)="aplicarPorcentaje()">% Aplicar</button>
+          <input type="text" [(ngModel)]="porcentaje" class="form-control inputPercent pull-right">
+          <label class="control-label pull-right">Establecer <strong>costo promedio + &nbsp; </strong>  </label>
+        </div>
+      </div>
+      <br>
+      <!-- <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none" *ngIf="selectedUnidad != null">
+        <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+        <input #gb type="text" pInputText size="50" placeholder="Filtro global" />
+      </div>
+      <p-dataTable [value]="partidas" [rows]="10" [paginator]="true" [pageLinks]="5" [rowsPerPageOptions]="[10,50,100]" sortMode="multiple"
+        reorderableColumns="false" [globalFilter]="gb" scrollable="true" [hidden]="selectedUnidad == null" exportFilename="Precios"
+        #dt>
+        <p-header>Hay <b>{{ partidas.length }}</b> Partidas</p-header>
+        <p-column exportable="false" field="idPartida" header="ID" [style]="{'width': '50px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+        <p-column field="tipoPartida" header="Tipo Partida" [style]="{'width': '160px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+        <p-column field="especialidad" header="Especialidad" [style]="{'width': '160px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+        <p-column field="clasificacion" header="Clasificación" [style]="{'width': '180px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+        <p-column field="subClasificacion" header="SubClasificación" [style]="{'width': '150px' }" [sortable]="true" [filter]="true"
+          filterPlaceholder="Buscar"></p-column>
+        <p-column field="partida" header="Partida" [style]="{'width': '120px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+        <p-column field="noParte" header="No. Parte" [style]="{'width': '120px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+        <p-column field="marca" header="Marca" [style]="{'width': '100px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+        <p-column field="descripcion" header="Descripción" [style]="{'width': '400px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar" filterMatchMode="contains"></p-column>
+
+        <p-column [style]="{'width': '125px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+          <ng-template pTemplate="header">
+            Precio Autorizado Julio Ortíz
+          </ng-template>
+          <ng-template let-col let-par="rowData" pTemplate="body">
+            <div class="row">
+              <div class="col-xs-6">
+                <input currencyMask type="text" [(ngModel)]="par.precio7" [ngClass]="{'pending' : par.precio7 == '0', 'setted': par.precio7 != '0'  }"
+                  class="form-control aprCantidad">
+              </div>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '125px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+          <ng-template pTemplate="header">
+            Precio Sistema
+          </ng-template>
+          <ng-template let-col let-par="rowData" pTemplate="body">
+            <div class="row">
+              <div class="col-xs-6">
+                <input currencyMask type="text" [(ngModel)]="par.venta" [ngClass]="{'pending' : par.venta == '0', 'setted': par.venta != '0'  }"
+                  class="form-control aprCantidad">
+              </div>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '170px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+          <ng-template pTemplate="header">
+            Precio Venta Desglozado
+          </ng-template>
+          <ng-template let-col let-par="rowData" pTemplate="body">
+            
+            <label class="value-label" [ngClass]="{'hidden': par.idTipoPartida==1}">MANO DE OBRA</label>
+            <div class="input-group mar-btm" [ngClass]="{'hidden': par.idTipoPartida==1}">
+              <input currencyMask type="text" size="9" [(ngModel)]="par.precioMano" [ngClass]="{'pending' : par.precioMano == '0', 'setted': par.precioMano != '0'  }"
+                class="form-control">
+              <span class="input-group-addon"><i class="fa fa-hand-paper-o"></i></span>
+            </div>
+
+            <label class="value-label" [ngClass]="{'hidden': par.idTipoPartida==2}">REFACCIONES</label>
+            <div class="divisor">
+              
+              <div class="input-group mar-btm" [ngClass]="{'hidden': par.idTipoPartida==2}">
+                <input currencyMask type="text" size="9" [(ngModel)]="par.precioRefaccion" [ngClass]="{'pending' : par.precioRefaccion == '0', 'setted': par.precioRefaccion != '0'  }"
+                  class="form-control">
+                <span class="input-group-addon"><i class="fa fa-cog"></i></span>
+              </div>
+              
+              <div class="input-group mar-btm" [ngClass]="{'hidden': par.idTipoPartida==1 || par.idTipoPartida==2 || par.idTipoPartida==3}">
+                <input currencyMask type="text" size="9" [(ngModel)]="par.precioLubricante" [ngClass]="{'pending' : par.precioLubricante == '0', 'setted': par.precioLubricante != '0'  }"
+                  class="form-control">
+                <span class="input-group-addon"><i class="fa fa-filter"></i></span>
+              </div>
+            </div>
+            <hr/>
+            
+            <div class="montoTotal">
+              {{ par.precioMano + par.precioRefaccion + par.precioLubricante | currency:'MXN':true:'1.2-2'}}
+            </div>
+            
+            <label class="value-label">TIEMPO</label>
+            <div class="input-group mar-btm">
+              <input type="time" [(ngModel)]="par.tiempo" [ngClass]="{'pending' : par.tiempo == '00:00', 'times': par.tiempo != '00:00'  }"
+                class="form-control timeContainer">
+              <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '125px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+          <ng-template pTemplate="header">
+            Precio Licitación DICONSA
+          </ng-template>
+          <ng-template let-col let-par="rowData" pTemplate="body">
+            <div class="row">
+              <div class="col-xs-6">
+                <input currencyMask type="text" [(ngModel)]="par.precio5" [ngClass]="{'pending' : par.precio5 == '0', 'setted': par.precio5 != '0'  }"
+                  class="form-control aprCantidad">
+              </div>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '125px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+          <ng-template pTemplate="header">
+            Precio Excel DICONSA
+          </ng-template>
+          <ng-template let-col let-par="rowData" pTemplate="body">
+            <div class="row">
+              <div class="col-xs-6">
+                <input currencyMask type="text" [(ngModel)]="par.precio6" [ngClass]="{'pending' : par.precio6 == '0', 'setted': par.precio6 != '0'  }"
+                  class="form-control aprCantidad">
+              </div>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '125px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+          <ng-template pTemplate="header">
+            Precio PEMEX MO y REF
+          </ng-template>
+          <ng-template let-col let-par="rowData" pTemplate="body">
+            <div class="row">
+              <div class="col-xs-6">
+                <input currencyMask type="text" [(ngModel)]="par.precio1" [ngClass]="{'pending' : par.precio1 == '0', 'setted': par.precio1 != '0'  }"
+                  class="form-control aprCantidad">
+              </div>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '125px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+          <ng-template pTemplate="header">
+            Precio PEMEX REF
+          </ng-template>
+          <ng-template let-col let-par="rowData" pTemplate="body">
+            <div class="row">
+              <div class="col-xs-6">
+                <input currencyMask type="text" [(ngModel)]="par.precio2" [ngClass]="{'pending' : par.precio2 == '0', 'setted': par.precio2 != '0'  }"
+                  class="form-control aprCantidad">
+              </div>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '125px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+          <ng-template pTemplate="header">
+            Costo Navistar
+          </ng-template>
+          <ng-template let-col let-par="rowData" pTemplate="body">
+            <div class="row">
+              <div class="col-xs-6">
+                <input currencyMask type="text" [(ngModel)]="par.precio3" [ngClass]="{'pending' : par.precio3 == '0', 'setted': par.precio3 != '0'  }"
+                  class="form-control aprCantidad">
+              </div>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '125px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+          <ng-template pTemplate="header">
+            Costo TALLERES
+          </ng-template>
+          <ng-template let-col let-par="rowData" pTemplate="body">
+            <div class="row">
+              <div class="col-xs-6">
+                <input currencyMask type="text" [(ngModel)]="par.precio4" [ngClass]="{'pending' : par.precio4 == '0', 'setted': par.precio4 != '0'  }"
+                  class="form-control aprCantidad">
+              </div>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '170px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+          <ng-template pTemplate="header">
+            Mínimo
+          </ng-template>
+          <ng-template let-par="rowData" pTemplate="body">
+           
+            <label class="value-label" [ngClass]="{'hidden': par.idTipoPartida==1}">MANO DE OBRA</label>
+            <div class="input-group mar-btm" [ngClass]="{'hidden': par.idTipoPartida==1}">
+              <input currencyMask type="text" [(ngModel)]="par.minimoMano" class="form-control min" disabled>
+              <span class="input-group-addon"><i class="fa fa-hand-paper-o"></i></span>
+            </div>
+            
+            <label class="value-label" [ngClass]="{'hidden': par.idTipoPartida==2}">REFACCIONES</label>
+            <div class="input-group mar-btm" [ngClass]="{'hidden': par.idTipoPartida==2}">
+              <input currencyMask type="text" [(ngModel)]="par.minimoPieza" class="form-control min" disabled>
+              <span class="input-group-addon"><i class="fa fa-cog"></i></span>
+            </div>
+            <hr/>
+            
+            <div class="montoTotal min">
+              {{ par.minimo | currency:'MXN':true:'1.2-2'}}
+            </div>
+            
+            <label class="value-label">TIEMPO</label>
+            <div class="input-group mar-btm">
+              <input type="time" [(ngModel)]="par.minimoTiempo" class="form-control timeContainer min" disabled>
+              <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '170px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+          <ng-template pTemplate="header">
+            Máximo
+          </ng-template>
+          <ng-template let-par="rowData" pTemplate="body">
+            
+            <label class="value-label" [ngClass]="{'hidden': par.idTipoPartida==1}">MANO DE OBRA</label>
+            <div class="input-group mar-btm" [ngClass]="{'hidden': par.idTipoPartida==1}">
+              <input currencyMask type="text" [(ngModel)]="par.maximoMano" class="form-control max" disabled>
+              <span class="input-group-addon"><i class="fa fa-hand-paper-o"></i></span>
+            </div>
+            
+            <label class="value-label" [ngClass]="{'hidden': par.idTipoPartida==2}">REFACCIONES</label>
+            <div class="input-group mar-btm" [ngClass]="{'hidden': par.idTipoPartida==2}">
+              <input currencyMask type="text" [(ngModel)]="par.maximoPieza" class="form-control max" disabled>
+              <span class="input-group-addon"><i class="fa fa-cog"></i></span>
+            </div>
+            <hr/>
+            
+            <div class="montoTotal max">
+              {{ par.maximo | currency:'MXN':true:'1.2-2'}}
+            </div>
+            
+            <label class="value-label">TIEMPO</label>
+            <div class="input-group mar-btm">
+              <input type="time" [(ngModel)]="par.maximoTiempo" class="form-control timeContainer max" disabled>
+              <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width': '170px' }" [sortable]="true" [filter]="true" filterPlaceholder="Buscar">
+          <ng-template pTemplate="header">
+            Promedio
+          </ng-template>
+          <ng-template let-par="rowData" pTemplate="body">
+            
+            <label class="value-label" [ngClass]="{'hidden': par.idTipoPartida==1}">MANO DE OBRA</label>
+            <div class="input-group mar-btm" [ngClass]="{'hidden': par.idTipoPartida==1}">
+              <input currencyMask type="text" [(ngModel)]="par.promedioMano" class="form-control prom" disabled>
+              <span class="input-group-addon"><i class="fa fa-hand-paper-o"></i></span>
+            </div>
+            
+            <label class="value-label" [ngClass]="{'hidden': par.idTipoPartida==2}">REFACCIONES</label>
+            <div class="input-group mar-btm" [ngClass]="{'hidden': par.idTipoPartida==2}">
+              <input currencyMask type="text" [(ngModel)]="par.promedioPieza" class="form-control prom" disabled>
+              <span class="input-group-addon"><i class="fa fa-cog"></i></span>
+            </div>
+            <hr/>
+            
+            <div class="montoTotal prom">
+              {{ par.promedio | currency:'MXN':true:'1.2-2'}}
+            </div>
+            
+            <label class="value-label">TIEMPO</label>
+            <div class="input-group mar-btm">
+              <input type="time" [(ngModel)]="par.promedioTiempo" class="form-control timeContainer prom" disabled>
+              <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width':'125px'}">
+          <ng-template pTemplate="header">
+            Foto
+          </ng-template>
+          <ng-template let-par="rowData" pTemplate="body">
+            <div class="fotoContent" *ngIf="par.foto != null || par.foto != '' ">
+              <a href="{{ URLDocs + par.foto }}" data-lightbox="image" data-title="Foto Partida" class="instructivo">
+                  <img src="{{ URLDocs + par.foto }}" class="fotoUnidad">
+              </a>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column [style]="{'width':'90px'}">
+          <ng-template pTemplate="header">
+            Instructivo
+          </ng-template>
+          <ng-template let-par="rowData" pTemplate="body">
+            <div class="fotoContent">
+              <a href="{{ URLDocs + par.instructivo }}" class="instructivo" download><i class="fa fa-file-pdf-o insIcon" aria-hidden="true"></i></a>
+            </div>
+          </ng-template>
+        </p-column>
+        <p-column styleClass="col-button" [style]="{'width': '70px' }">
+          <ng-template pTemplate="header">
+              Acción
+          </ng-template>
+          <ng-template let-uni="rowData" pTemplate="body">
+            <button class="btn btn-primary btn-icon btn-circle" (click)="Actualizar(uni)" pTooltip="Guardar" tooltipPosition="top"><i class="fa fa-floppy-o"></i></button>
+          </ng-template>
+        </p-column>
+        <p-column field="precio7" header="Precio Autorizado Julio Ortíz" [hidden]="true"></p-column>
+        <p-column field="venta" header="Precio Sistema" [hidden]="true"></p-column>
+        <p-column field="precio5" header="Precio Licitación DICONSA" [hidden]="true"></p-column>
+        <p-column field="precio6" header="Precio Excel DICONSA" [hidden]="true"></p-column>
+        <p-column field="precio1" header="PEMEX MO y REF" [hidden]="true"></p-column>
+        <p-column field="precio2" header="PEMEX REF" [hidden]="true"></p-column>
+        <p-column field="precio3" header="Costo Navistar" [hidden]="true"></p-column>
+        <p-column field="precio4" header="Costo Talleres" [hidden]="true"></p-column>
+        <p-column field="precioMano" exportable="true" header="Precio Mano Obra" [hidden]="true"></p-column>
+        <p-column field="precioRefaccion" exportable="true" header="Precio Refaccion" [hidden]="true"></p-column>
+        <p-column field="precioLubricante" exportable="true" header="Precio Lubricante" [hidden]="true"></p-column>
+      </p-dataTable> -->
+
+      
+      <dx-data-grid [dataSource]="partidas" *ngIf="selectedUnidad != null" id="gridContainer"
+     
+        [showColumnLines]="true"
+        [showRowLines]="true"
+        [showBorders]="false"
+        [rowAlternationEnabled]="true"
+        [allowColumnReordering]="false" 
+        [allowColumnResizing]="true" 
+        [columnAutoWidth]="true"
+        (onExporting)="onExporting($event)" (onExported)="onExported($event)">
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxo-editing mode="cell" [allowUpdating]="true"></dxo-editing>
+        <dxo-paging [pageSize]="10"></dxo-paging>
+        <dxo-export [enabled]="true" fileName="Partidas" [allowExportSelectedData]="false"></dxo-export>
+        <dxo-header-filter [visible]="true"></dxo-header-filter>
+        <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+
+        <dxi-column dataField="idPartida" caption="ID" [fixed]="true" [filterOperations]="['contains']" [allowEditing]="false"></dxi-column>
+        <dxi-column caption="Tipo Partida" [width]="160" dataType="date" [allowEditing]="false" cellTemplate="tipoPartidaTemplate">
+          <div *dxTemplate="let uni of 'tipoPartidaTemplate'">
+            <div class="row">
+              <div class="col-md-12" style="white-space: normal;">
+                {{uni.data.tipoPartida}}
+              </div>
+            </div>
+          </div>
+        </dxi-column>
+        <dxi-column dataField="especialidad" caption="Especialidad" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="clasificacion" caption="Clasificacion" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="subClasificacion" caption="SubClasificacion" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="partida" caption="Partida" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="noParte" caption="No. Parte" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="marca" caption="Marca" [allowEditing]="false"></dxi-column>
+        <dxi-column dataField="descripcion" [visible]="false"></dxi-column>
+        
+        <dxi-column caption="Descripción" [allowEditing]="false" [width]="400" cellTemplate="descriptionTemplate" >
+          <div *dxTemplate="let uni of 'descriptionTemplate'">
+            <div class="row">
+              <div class="col-md-12" style="white-space: normal;">
+                {{uni.data.descripcion}}
+              </div> 
+            </div>
+          </div>
+        </dxi-column>
+
+        <dxi-column dataField="precio7" caption="Precio Autorizado Julio Ortíz" [format]="{type: 'currency', precision: 2}">
+          <dxi-validation-rule type="numeric"></dxi-validation-rule>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <!-- <dxi-column caption="Precio Autorizado Julio Ortíz" cellTemplate="precio7Template" [allowEditing]="false" >
+          <div *dxTemplate="let uni of 'precio7Template'">
+            <div class="row">
+              <div class="col-md-12">
+                <input currencyMask type="text" [(ngModel)]="uni.data.precio7" [ngClass]="{ 'pending' : uni.data.precio7 == '0', 'setted': uni.data.precio7 != '0' }"  class="form-control">
+              </div>
+            </div>
+          </div>
+        </dxi-column> -->
+        <dxi-column dataField="venta" caption="Precio Sistema" [format]="{type: 'currency', precision: 2}" >
+          <dxi-validation-rule type="numeric"></dxi-validation-rule>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column caption="Precio Venta Desglozado" cellTemplate="desgloseTemplate" [allowEditing]="false">
+          <div *dxTemplate="let uni of 'desgloseTemplate'">
+            <div class="row" *ngIf="uni.data.idTipoPartida != 1">
+              <div class="col-md-12">
+                <label class="value-label">MANO DE OBRA</label>
+                <div class="input-group mar-btm">
+                  <!-- <input currencyMask type="text" size="9" [(ngModel)]="uni.data.precioMano" [ngClass]="{ 'pending' : uni.data.precioMano == '0', 'setted': uni.data.precioMano != '0' }"  class="form-control aprCantidad" > -->
+                  <dx-number-box format="$ #,##0.00" [(value)]="uni.data.precioMano" ></dx-number-box>
+                  <!-- <dx-number-box format="{type: 'currency', precision: 2}" [(value)]="uni.data.precioMano" ></dx-number-box> -->
+                  <span class="input-group-addon"><i class="fa fa-hand-paper-o"></i></span>
+                </div>
+              </div>
+            </div>
+            <hr>
+
+            <label class="value-label">REFACCIONES</label>
+            <div class="divisor">
+              <div class="row" *ngIf="uni.data.idTipoPartida != 2">
+                <div class="col-md-12">
+                  <div class="input-group mar-btm">
+                    <!-- <input currencyMask size="9" [(ngModel)]="uni.data.precioRefaccion" [ngClass]="{ 'pending' : uni.data.precioRefaccion == '0', 'setted': uni.data.precioRefaccion != '0' }" class="form-control aprCantidad" > -->
+                    <dx-number-box format="$ #,##0.00" [(value)]="uni.data.precioRefaccion"></dx-number-box>
+                    <span class="input-group-addon"><i class="fa fa-cog"></i></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row" *ngIf="uni.data.idTipoPartida != 1 && uni.data.idTipoPartida != 2 && uni.data.idTipoPartida != 3">
+                <div class="col-md-12">
+                  <div class="input-group mar-btm">
+                    <!-- <input currencyMask size="9" [(ngModel)]="uni.data.precioLubricante" [ngClass]="{ 'pending' : uni.data.precioLubricante == '0', 'setted': uni.data.precioLubricante != '0' }" class="form-control aprCantidad" > -->
+                    <dx-number-box format="$ #,##0.00" [(value)]="uni.data.precioLubricante"></dx-number-box>
+                    <span class="input-group-addon"><i class="fa fa-filter"></i></span>
+                  </div>
+                </div>
+              </div>              
+            </div>
+            <hr>
+
+            <div class="montoTotal">
+              {{uni.data.precioMano + uni.data.precioRefaccion + uni.data.precioLubricante | currency:'MXN': true: '1.2-2'}}
+            </div>
+
+            <label class="value-label">TIEMPO</label>
+            <div class="input-group mar-btm">
+              <!-- <input type="time" [(ngModel)]="uni.data.tiempo" [(value)]="uni.data.tiempo" class="form-control timeContainer"> -->
+              <dx-text-box [(value)]="uni.data.maximoTiempo" mask="00:00" [maskRules]="rules"></dx-text-box>
+              <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
+            </div>
+          </div>
+        </dxi-column>
+        <dxi-column dataField="precio5" caption="Precio Licitación DICONSA" [format]="{type: 'currency', precision: 2}" >
+          <dxi-validation-rule type="numeric"></dxi-validation-rule>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="precio6" caption="Precio Excel DICONSA" [format]="{type: 'currency', precision: 2}" >
+          <dxi-validation-rule type="numeric"></dxi-validation-rule>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="precio1" caption="Precio PEMEX MO y REF" [format]="{type: 'currency', precision: 2}" >
+          <dxi-validation-rule type="numeric"></dxi-validation-rule>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="precio2" caption="Precio PEMEX REF" [format]="{type: 'currency', precision: 2}" >
+          <dxi-validation-rule type="numeric"></dxi-validation-rule>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="precio3" caption="Precio Navistar" [format]="{type: 'currency', precision: 2}" >
+          <dxi-validation-rule type="numeric"></dxi-validation-rule>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="precio4" caption="Precio Talleres" [format]="{type: 'currency', precision: 2}" >
+          <dxi-validation-rule type="numeric"></dxi-validation-rule>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+
+        <dxi-column dataField="precioMano" [visible]="false" [format]="{type: 'currency', precision: 2}"></dxi-column>
+        <dxi-column dataField="precioRefaccion" [visible]="false" [format]="{type: 'currency', precision: 2}"></dxi-column>
+        <dxi-column dataField="precioLubricante" [visible]="false" [format]="{type: 'currency', precision: 2}"></dxi-column>
+
+        <!-- <dxi-column dataField="venta" caption="Mínimo" format="currency" ></dxi-column> -->
+        <!-- <dxi-column dataField="venta" caption="Máximo" format="currency" ></dxi-column> -->
+        <!-- <dxi-column dataField="venta" caption="Promedio" format="currency" ></dxi-column> -->
+        
+        <dxi-column dataField="idPartida" caption="Foto" cellTemplate="fotoTemplate" [allowEditing]="false"></dxi-column>
+        <div *dxTemplate="let uni of 'fotoTemplate'" class="fotoContent" [hidden]="uni.data.foto == null || uni.data.foto == '' ">
+            <a href="{{ URLDocs + uni.data.foto }}" data-lightbox="image" data-title="Foto Partida" class="instructivo">
+                <img src="{{ URLDocs + uni.data.foto }}" class="fotoUnidad">
+            </a>
+        </div>
+
+        <dxi-column dataField="idPartida" caption="Instructivo" cellTemplate="instructivoTemplate" [allowEditing]="false"></dxi-column>
+        <div *dxTemplate="let uni of 'instructivoTemplate'" class="fotoContent" [hidden]="uni.data.instructivo == null || uni.data.instructivo == '' ">
+            <a href="{{ URLDocs + uni.data.instructivo }}" target="_blank" class="instructivo"><i class="fa fa-file-pdf-o insIcon" aria-hidden="true"></i>
+            </a>
+        </div>
+
+        <dxi-column dataField="idPartida" caption="Acción" cellTemplate="detailTemplate" [width]="100" [allowEditing]="false"></dxi-column>
+        <div *dxTemplate="let suc of 'detailTemplate'">
+            <button class="btn btn-primary btn-icon btn-circle" (click)="Actualizar(suc.data)" pTooltip="Guardar" tooltipPosition="top"><i class="fa fa-floppy-o"></i></button>
+            <!-- <button class="btn btn-default btn-icon btn-circle" (click)="cancelar(suc.data)" pTooltip="Cancelar" tooltipPosition="top"><i class="fa fa-ban"></i></button> -->
+        </div>
+
+        <dxo-pager [showInfo]="true" infoText="Se han encontrado {2} registros" [showNavigationButtons]="true" [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]">
+        </dxo-pager>
+      </dx-data-grid>
+      <br>
+      <hr>
+    </div>
+  </div>
+</div>
+
+<p-confirmDialog header="Alerta" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>

@@ -1,0 +1,22 @@
+#divEmpleado {
+  display: inline-block;
+  width: 50%;
+  padding-left: 10px;
+  padding-right: 10px;
+  vertical-align: top; }
+
+#divAcceso {
+  display: inline-block;
+  width: 49%;
+  padding-left: 10px;
+  padding-right: 10px;
+  vertical-align: top; }
+
+#btnBuscar {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-bottom: -55px; }
+
+.imagenAcceso {
+  width: 100px; }

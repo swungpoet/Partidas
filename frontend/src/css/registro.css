@@ -1,0 +1,26 @@
+.icon30 {
+  font-size: 30px; }
+
+.icon60 {
+  font-size: 60px; }
+
+.white {
+  color: white; }
+
+#btnBuscar {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-bottom: -55px; }
+
+#divUnidad {
+  display: inline-block;
+  width: 50%;
+  padding-right: 10px;
+  padding-left: 10px; }
+
+#divRegistro {
+  display: inline-block;
+  width: 49%;
+  padding-left: 10px;
+  padding-right: 10px; }

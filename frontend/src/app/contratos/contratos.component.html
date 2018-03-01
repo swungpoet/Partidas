@@ -1,0 +1,82 @@
+<div id="page-title">
+    <h1 class="page-header text-overflow">Contratos</h1>
+</div>
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+
+    <!-- Basic Data Tables -->
+    <!--===================================================-->
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Lista de contratos</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <a class="btn btn-warning btn-labeled fa fa-plus pull-right" routerLink="/nuevocontrato">Nuevo Contrato</a>
+                </div>
+            </div>
+            <br>
+            <!-- <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input #gb type="text" pInputText size="50" placeholder="Filtro global" />
+            </div>
+            <p-dataTable [value]="contratos" [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]" sortMode="multiple"
+                 reorderableColumns="true" [responsive]="true" [globalFilter]="gb" scrollable="true" scrollWidth="100%" #dt>
+                <p-column *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="true" [filter]="true" filterPlaceholder="Buscar" [style]="{'width': col.width }"></p-column>
+                <p-column styleClass="col-button" [style]="{'width': '160px' }">
+                    <ng-template pTemplate="header">
+                        Acción
+                    </ng-template>
+                    <ng-template let-con="rowData" pTemplate="body">
+                        <button class="btn btn-primary btn-icon btn-circle" (click)="zonas(con)" ><i class="fa fa-map-o"></i></button>
+                        <button class="btn btn-success btn-icon btn-circle" (click)="precios(con)" ><i class="fa fa-usd"></i></button>
+                        <button class="btn btn-info btn-icon btn-circle" (click)="editar(con)" ><i class="fa fa-pencil"></i></button>
+                        <button class="btn btn-default btn-icon btn-circle" (click)="eliminar(con)" ><i class="fa fa-trash-o"></i></button>
+                    </ng-template>
+                </p-column>
+            </p-dataTable> -->
+
+            <dx-data-grid #dt id="gridContainer" [dataSource]="contratos"
+                [showColumnLines]="true"
+                [showRowLines]="true"
+                [showBorders]="false"
+                [rowAlternationEnabled]="true"
+                [allowColumnReordering]="false" 
+                [allowColumnResizing]="true" 
+                [columnAutoWidth]="true"
+                (onExporting)="onExporting($event)" (onExported)="onExported($event)">
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <dxo-header-filter [visible]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="240" placeholder="Search..."></dxo-search-panel>
+
+                <dxi-column dataField="idContrato" caption="ID" [width]="70" [fixed]="true" [filterOperations]="['contains']"></dxi-column>
+                <dxi-column dataField="cliente" caption="Cliente"></dxi-column>
+                <dxi-column dataField="folioLicitacion" caption="Folio Lic."></dxi-column>
+                <dxi-column dataField="nombreLicitacion" caption="Nombre Lic."></dxi-column>
+                <dxi-column dataField="numeroContrato" caption="Numero Contrato"></dxi-column>
+                <dxi-column dataField="descripcionContrato" caption="Descripción Contrato"></dxi-column>
+                <dxi-column dataField="fechaInicioTXT" caption="Inicio" dataType="date"></dxi-column>
+                <dxi-column dataField="fechaFinTXT" caption="Fin" dataType="date"></dxi-column>
+                <dxi-column dataField="unidades"></dxi-column>
+                <dxi-column dataField="proveedores"></dxi-column>
+
+                <dxi-column dataField="idCOntrato" caption="Acción" cellTemplate="detailTemplate" [width]="180"></dxi-column>
+                <div *dxTemplate="let suc of 'detailTemplate'">
+                    <button class="btn btn-primary btn-icon btn-circle" (click)="zonas(suc.data)" ><i class="fa fa-map-o"></i></button>
+                    <button class="btn btn-success btn-icon btn-circle" (click)="precios(suc.data)" ><i class="fa fa-usd"></i></button>
+                    <button class="btn btn-info btn-icon btn-circle" (click)="editar(suc.data)" ><i class="fa fa-pencil"></i></button>
+                    <button class="btn btn-default btn-icon btn-circle" (click)="eliminar(suc.data)" ><i class="fa fa-trash-o"></i></button>
+                </div>
+
+                <dxo-pager [showInfo]="true" infoText="Se han encontrado {2} registros" [showNavigationButtons]="true" [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]">
+                </dxo-pager>
+            </dx-data-grid>
+        </div>
+    </div>
+    <!--===================================================-->
+    <!-- End Striped Table -->
+</div>
+
+<p-confirmDialog header="Alerta" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>

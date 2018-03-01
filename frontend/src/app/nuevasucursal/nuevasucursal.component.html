@@ -1,0 +1,356 @@
+<div id="page-title">
+    <h1 class="page-header text-overflow">Alta de Sucursales</h1>
+</div>
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+    <div class="row">
+        <div class="col-sm-12">
+
+            <!-- <form class="form-horizontal panel-body form-horizontal form-padding" [formGroup]="frmProveedor" (ngSubmit)="save(frmProveedor.value);"> -->
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Introduzca todos los datos para crear/editar una sucursal</h3>
+                </div>
+                <div class="panel-body">
+                    <form action="your-action" (submit)="save($event)">
+                        <dx-form id="formProveedor" [formData]="proveedor">
+                            <dxi-item itemType="group" caption="Proveedor">
+                                <dx-scroll-view [showScrollbar]="'always'">
+                                    <div class="dx-fieldset">
+                                        <div class="dx-fieldset-header">Datos Proveedor</div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div class="dx-field">
+                                                    <div class="dx-field-label">ID Proveedor</div>
+                                                    <div class="dx-field-value" style="padding: 10px 15px 9px 0;">
+                                                        {{proveedor.idProveedor}}
+                                                    </div>
+                                                </div>
+                                                <div class="dx-field">
+                                                    <div class="dx-field-label">Razón Social</div>
+                                                    <div class="dx-field-value" style="padding: 10px 15px 9px 0;">
+                                                        {{proveedor.razonSocial}}
+                                                    </div>
+                                                </div>
+
+                                                <div class="dx-field">
+                                                    <div class="dx-field-label">RFC</div>
+                                                    <div class="dx-field-value" style="padding: 10px 15px 9px 0;">
+                                                        <label>{{proveedor.RFC}}</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="dx-field">
+                                                    <div class="dx-field-label">Categoria</div>
+                                                    <div class="dx-field-value" style="padding: 10px 15px 9px 0;">
+                                                        <label dataType="date">{{proveedor.selectedCategoria}}</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xs-6">
+                                                <div class="dx-field">
+                                                    <dx-tile-view [height]="200" [baseItemHeight]="100" [baseItemWidth]="160" width="100%" [itemMargin]="10" direction="vertical">
+                                                        <dxi-item *ngFor="let doc of documentosEncabezado">
+                                                            <div class="price">{{doc.descripcion}}</div>
+                                                            <a href="{{ URLDocs + 'partidas/' + doc.archivo }}" target="_blank" *ngIf="doc.archivo.indexOf('.jpg')==-1 && doc.archivo.indexOf('.png')==-1">
+                                                                <img class="img-responsive" style="height: 80px; padding-left: 30px;" src="../assets/file.png">
+                                                            </a>
+                                                            <a href="{{ URLDocs + 'partidas/' + doc.archivo }}" target="_blank" *ngIf="doc.archivo.indexOf('.pdf')==-1">
+                                                                <img class="img-responsive" src="{{ URLDocs + '/partidas/' + doc.archivo }}">
+                                                            </a>
+                                                        </dxi-item>
+                                                    </dx-tile-view>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </dx-scroll-view>
+                            </dxi-item>
+
+                            <dxi-item itemType="group" caption="Sucursal">
+                                <div class="dx-fieldset">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="dx-field-label">ID Sucursal</div>
+                                            <div class="dx-field-value" style="padding: 10px 15px 9px 0;">
+                                                {{proveedor.idSucursal}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="dx-fieldset">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="dx-field">
+                                                <div class="dx-field-label">Nombre Sucursal</div>
+                                                <div class="dx-field-value">
+                                                    <dx-text-box [(value)]="proveedor.nombreSucursal" type="text">
+                                                        <dx-validator>
+                                                            <dxi-validation-rule type="required" message="Nombre Sucursal is obligatorio"></dxi-validation-rule>
+                                                        </dx-validator>
+                                                    </dx-text-box>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="dx-fieldset">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="dx-field">
+                                                <div class="dx-field-label">Clasificacion</div>
+                                                <div class="dx-field-value">
+                                                    <dx-select-box [items]="clasificacionDDL" [(value)]="proveedor.selectedClasificacion" (onValueChanged)="onClasificacionValueChanged($event)">
+                                                        <dx-validator>
+                                                            <dxi-validation-rule type="required" message="Clasificacion es obligatoria"></dxi-validation-rule>
+                                                        </dx-validator>
+                                                    </dx-select-box>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="dx-field-label">Telefono</div>
+                                            <div class="dx-field-value">
+                                                <dx-text-box [(value)]="proveedor.telefono">
+                                                </dx-text-box>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="dx-fieldset">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="dx-field">
+                                                <div class="dx-field-label">Mail</div>
+                                                <div class="dx-field-value">
+                                                    <dx-text-box [(value)]="proveedor.mail">
+
+                                                    </dx-text-box>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="dx-field-label">Contacto</div>
+                                            <div class="dx-field-value">
+                                                <dx-text-box [(value)]="proveedor.contacto">
+                                                </dx-text-box>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="agregarImagen" class="dx-fieldset">
+                                    <div class="row">
+                                        <div class="col-xs-10">
+                                            <div class="dx-field">
+                                                <dx-tile-view id="tileView" [height]="200" [baseItemHeight]="100" [baseItemWidth]="160" width="100%" [itemMargin]="10" direction="vertical"
+                                                    (onItemContextMenu)="onItemContextMenu($event)">
+                                                    <dxi-item *ngFor="let doc of documentosSucursal">
+                                                        <div class="price">{{doc.descripcion}}</div>
+                                                        <a href="{{ URLDocs + 'partidas/' + doc.archivo }}" target="_blank" *ngIf="doc.archivo.indexOf('.jpg')==-1 && doc.archivo.indexOf('.png')==-1">
+                                                            <img class="img-responsive" style="height: 80px; padding-left: 30px;" src="../assets/file.png">
+                                                        </a>
+                                                        <a href="{{ URLDocs + 'partidas/' + doc.archivo }}" target="_blank" *ngIf="doc.archivo.indexOf('.pdf')==-1">
+                                                            <img class="img-responsive" src="{{ URLDocs + '/partidas/' + doc.archivo }}">
+                                                        </a>
+                                                        <dx-context-menu 
+                                                            [dataSource]="menuItems" 
+                                                            [width]="200" 
+                                                            target="#tileView" 
+                                                            (onItemClick)="onItemClick($event)">
+                                                        </dx-context-menu>
+                                                    </dxi-item>
+                                                </dx-tile-view>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <button type="button" class="btn btn-info pull-right" (click)="myModalImagenes.open()">Agregar imagen</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr/>
+                                <div class="dx-fieldset">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="dx-field">
+                                                <div class="dx-field-label">Tipos de Combustible</div>
+                                                <div class="dx-field-value">
+                                                    <div class="dx-searchbar">
+                                                        <dx-text-box valueChangeEvent="keyup" placeholder="Search" mode="search" (onValueChanged)="searchCombustible($event)">
+                                                        </dx-text-box>
+                                                    </div>
+                                                    <dx-list [dataSource]="combustiblesList" [height]="200" selectionMode="all" selectAllMode="page" [showSelectionControls]="true"
+                                                        [selectedItemKeys]="proveedor.selectedCombustible" (onSelectionChanged)="onCombustibleSelectionChanged($event)">
+                                                    </dx-list>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr/>
+                                <div class="dx-fieldset">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="dx-field">
+                                                <div class="dx-field-label">Especialidades GASOLINA</div>
+                                                <div class="dx-field-value">
+                                                    <div class="dx-searchbar">
+                                                        <dx-text-box valueChangeEvent="keyup" placeholder="Search" mode="search" (onValueChanged)="searchGasolina($event)">
+                                                        </dx-text-box>
+                                                    </div>
+                                                    <dx-list [dataSource]="especialidadesGasList" [height]="200" selectionMode="all" selectAllMode="page" [showSelectionControls]="true"
+                                                        [selectedItemKeys]="proveedor.selectedGas" (onSelectionChanged)="onGasSelectionChanged($event)">
+                                                        <div *dxTemplate="let data of 'item'">
+                                                            <div>{{data.label}}</div>
+                                                        </div>
+                                                    </dx-list>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div class="dx-field">
+                                                <div class="dx-field-label">Especialidades DIESEL</div>
+                                                <div class="dx-field-value">
+                                                    <div class="dx-searchbar">
+                                                        <dx-text-box valueChangeEvent="keyup" placeholder="Search" mode="search" (onValueChanged)="searchDIESEL($event)">
+                                                        </dx-text-box>
+                                                    </div>
+                                                    <dx-list [dataSource]="especialidadesDIESELList" [height]="200" selectionMode="all" selectAllMode="page" [showSelectionControls]="true"
+                                                        [selectedItemKeys]="proveedor.selectedDIESEL" (onSelectionChanged)="onDIESELSelectionChanged($event)">
+                                                    </dx-list>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    <div class="dx-field-label">Dirección Comercial</div>
+                                                    <div class="dx-field-value">
+                                                        <div class="input-group">
+                                                            <dx-text-box [(value)]="proveedor.direccion" placeholder="Buscar Dirección">
+                                                            </dx-text-box>
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-info " type="button" (click)="mdAddress.open()">
+                                                                    <span class="fa fa-search"></span>
+                                                                </button>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-xs-12">
+
+                                                    <div class="form-group mapContainer ">
+                                                        <agm-map [latitude]="latitude" [longitude]="longitude" [scrollwheel]="false" [zoom]="zoom ">
+                                                            <agm-marker [latitude]="latitude " [longitude]="longitude " [label]=" 'P' " [markerDraggable]="true" (dragEnd)="getAddress($event)"></agm-marker>
+                                                        </agm-map>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="dx-fieldset text-right">
+                                        <div class="dx-field">
+                                            <dx-button type="normal" text="Cancelar" (onClick)="cancelar()"></dx-button>
+                                            <dx-button text="Guardar Sucursal" [visible]="true" type="success" [useSubmitBehavior]="true"></dx-button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </dxi-item>
+                        </dx-form>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<p-confirmDialog header="Alerta " icon="fa fa-question-circle " width="425 "></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>
+
+<modal #mdAddress title="Busqueda de direcciones" modalClass="modal-lg" [hideCloseButton]="false" [closeOnEscape]="false"
+    [closeOnOutsideClick]="false" (onOpen)="getBusquedaGoogle(proveedor.direccion)">
+    <modal-header>
+        <h3>Resultados encontrados...</h3>
+    </modal-header>
+    <modal-content>
+        <div class="row">
+            <div class="col-xs-12">
+                <p-dataTable [value]="addressList" sortMode="multiple" scrollable="true" scrollWidth="100%" reorderableColumns="true" [responsive]="true"
+                    [globalFilter]="gb" #dt exportFilename="TiposUnidad">
+                    <p-header>Resultados encontrados</p-header>
+                    <p-column field="formatted_address" header="Direccion" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+                    <p-column>
+                        <ng-template pTemplate="header">
+                            Acción
+                        </ng-template>
+                        <ng-template let-address="rowData" pTemplate="body">
+                            <button class="btn btn-info " type="button" (click)="setAddress(address)">
+                                <span class="fa fa-search"></span>
+                            </button>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </div>
+        </div>
+    </modal-content>
+    <modal-footer>
+        <div class="row">
+            <div class="col-xs-12 text-right">
+                <button #btnCloseModal class="btn btn-default" type="button" (click)="mdAddress.close()">Cerrar</button>
+            </div>
+        </div>
+    </modal-footer>
+</modal>
+
+
+<modal #myModalImagenes title="Imagen" [hideCloseButton]="false" [closeOnEscape]="false" [closeOnOutsideClick]="false">
+    <modal-content>
+        <div class="row">
+            <div class="col-sm-12">
+                <form class="form-horizontal" [formGroup]="frmImagen" (ngSubmit)="saveImagen(frmImagen.value)">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-sm-3 control-label">Tipo de imagen</label>
+                                <div class="col-sm-7">
+                                    <dx-select-box [dataSource]="tipoDocumentoDDL" placeholder="Selecciona Imagen" [showClearButton]="true" displayExpr="label"
+                                        [formControl]="frmImagen.controls['idDocumento']" valueExpr="value">
+                                    </dx-select-box>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <dx-file-uploader selectButtonText="Selecccionar documento" labelText="" accept="image/*" uploadUrl="{{URL + 'file/upload'}}"
+                                    (onUploaded)="onUpload($event)" uploadMode="instantly" [(value)]="imagen">
+                                </dx-file-uploader>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="text-right">
+                            <button #btnCloseModalImagen class="btn btn-default" type="button" (click)="myModalImagenes.close();">Cancelar</button>
+                            <button class="btn btn-warning" [disabled]="!frmImagen.valid" type="submit">Guardar imagen</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </modal-content>
+</modal>

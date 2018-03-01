@@ -1,0 +1,133 @@
+<div id="page-title">
+    <h1 class="page-header text-overflow">Clientes</h1>
+</div>
+<div id="page-content" [ngBusy]="{busy: busy, message: 'Cargando...', backdrop: true, delay: 200, minDuration: 600}">
+
+    <!-- Basic Data Tables -->
+    <!--===================================================-->
+    <div class="panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Lista de clientes</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <button #btnOpen class="btn btn-warning btn-labeled fa fa-plus pull-right" (click)="myModal.open()">Nuevo Cliente</button>
+                </div>
+            </div>
+            <br>
+            <!-- <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+                <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                <input #gb type="text" pInputText size="50" placeholder="Filtro global" />
+            </div>
+            <p-dataTable [value]="clientes" [rows]="10" [paginator]="true" [pageLinks]="5" [rowsPerPageOptions]="[10,50,100]" sortMode="multiple"
+                resizableColumns="true" reorderableColumns="true" [responsive]="true" [globalFilter]="gb" #dt>
+                <p-header>Hay <b>{{ clientes.length }}</b> Clientes</p-header>
+                <p-column *ngFor="let col of cols" [field]="col.field" [header]="col.header" [sortable]="true" [filter]="true" filterPlaceholder="Buscar"></p-column>
+                <p-column styleClass="col-button">
+                    <ng-template pTemplate="header">
+                        Acción
+                    </ng-template>
+                    <ng-template let-cli="rowData" pTemplate="body">
+                        <button class="btn btn-default btn-icon btn-circle" (click)="openEditar(cli)" pTooltip="Editar" tooltipPosition="top"><i class="fa fa-pencil"></i></button>
+                        <button class="btn btn-default btn-icon btn-circle" (click)="eliminar(cli)" pTooltip="Eliminar" tooltipPosition="top"><i class="fa fa-trash-o"></i></button>
+                    </ng-template>
+                </p-column>
+            </p-dataTable> -->
+
+            <dx-data-grid [dataSource]="clientes" [showColumnLines]="true" [showRowLines]="false" [showBorders]="false"
+                [rowAlternationEnabled]="true" [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                (onExporting)="onExporting($event)" (onExported)="onExported($event)">
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true"></dxo-pager>
+                <dxo-export [enabled]="true" fileName="Clientes" [allowExportSelectedData]="false"></dxo-export>
+                <dxo-group-panel [visible]="true"></dxo-group-panel>
+                <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+                <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                <dxo-sorting mode="multiple"></dxo-sorting>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-header-filter [visible]="true"></dxo-header-filter>
+                <dxo-search-panel [visible]="true" [width]="240" placeholder="Buscar en todo..."></dxo-search-panel>
+
+                <dxi-column dataField="idCliente" caption="ID" [fixed]="true" [width]="60" [filterOperations]="['contains']"></dxi-column>
+                <dxi-column dataField="nombreComercial" caption="Nombre Comercial"></dxi-column>
+                <dxi-column dataField="razonSocial" caption="Razón Social"></dxi-column>
+                <dxi-column dataField="rfc" caption="RFC"></dxi-column>
+                <dxi-column dataField="direccion" caption="Direccion"></dxi-column>
+                <dxi-column dataField="telefono" caption="Teléfono"></dxi-column>
+
+                <dxi-column dataField="idProveedorEncabezado" [allowFiltering]="false" [fixed]="true" [allowSorting]="false" caption="Acción" cellTemplate="cellTemplate" [width]="80"></dxi-column>
+                <div *dxTemplate="let pro of 'cellTemplate'">
+                    <button class="btn btn-default btn-icon btn-circle" (click)="openEditar(pro.data)" pTooltip="Editar" tooltipPosition="top"><i class="fa fa-pencil"></i></button>
+                    <button class="btn btn-default btn-icon btn-circle" (click)="eliminar(pro.data)" pTooltip="Eliminar" tooltipPosition="top"><i class="fa fa-trash-o"></i></button>
+                </div>
+
+                <dxo-pager [showInfo]="true" infoText="Se han encontrado {2} registros" [showNavigationButtons]="true" [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]">
+                </dxo-pager>
+            </dx-data-grid>
+        </div>
+    </div>
+    <!--===================================================-->
+    <!-- End Striped Table -->
+</div>
+
+<p-confirmDialog header="Alerta" icon="fa fa-question-circle" width="425"></p-confirmDialog>
+<p-growl [value]="msgs" [life]="2000"></p-growl>
+
+<modal #myModal title="Nuevo Cliente" [hideCloseButton]="false" [closeOnEscape]="false" [closeOnOutsideClick]="false" (onOpen)="onOpenModal()">
+    <modal-content>
+        <div class="row">
+            <div class="col-sm-12">
+                <!--Horizontal Form-->
+                <!--===================================================-->
+                <form class="form-horizontal" [formGroup]="frmClientes" (ngSubmit)="save(frmClientes.value);">
+                    <div class="panel-body">
+                        <div class="form-group" [ngClass]="{'has-error':!frmClientes.controls['nombreComercial'].valid && frmClientes.controls['nombreComercial'].touched}">
+                            <label class="col-sm-3 control-label">Nombre Comercial</label>
+                            <div class="col-sm-9">
+                                <input type="text" placeholder="Ingrese un nombre comercial" class="form-control" [formControl]="frmClientes.controls['nombreComercial']">
+                                <div class="alert alert-danger" *ngIf="!frmClientes.controls['nombreComercial'].valid && frmClientes.controls['nombreComercial'].touched">Debe introducir un nombre comercial.</div>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error':!frmClientes.controls['razonSocial'].valid && frmClientes.controls['razonSocial'].touched}">
+                            <label class="col-sm-3 control-label">Razón Social</label>
+                            <div class="col-sm-9">
+                                <input type="text" placeholder="Ingrese la razón social" class="form-control" [formControl]="frmClientes.controls['razonSocial']">
+                                <div class="alert alert-danger" *ngIf="!frmClientes.controls['razonSocial'].valid && frmClientes.controls['razonSocial'].touched">Debe introducir una razon social.</div>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error':!frmClientes.controls['rfc'].valid && frmClientes.controls['rfc'].touched}">
+                            <label class="col-sm-3 control-label">RFC</label>
+                            <div class="col-sm-9">
+                                <input type="text" placeholder="Ingrese un RFC" class="form-control" [formControl]="frmClientes.controls['rfc']">
+                                <div class="alert alert-danger" *ngIf="!frmClientes.controls['rfc'].valid && frmClientes.controls['rfc'].touched">Debe Introducir un RFC.</div>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error':!frmClientes.controls['direccion'].valid && frmClientes.controls['direccion'].touched}">
+                            <label class="col-sm-3 control-label">Dirección</label>
+                            <div class="col-sm-9">
+                                <textarea rows="4" placeholder="Ingrese una dirección" class="form-control" [formControl]="frmClientes.controls['direccion']"> </textarea>
+                                <div class="alert alert-danger" *ngIf="!frmClientes.controls['direccion'].valid && frmClientes.controls['direccion'].touched">Debe introducir una dirección.</div>
+                            </div>
+                        </div>
+                        <div class="form-group" [ngClass]="{'has-error':!frmClientes.controls['telefono'].valid && frmClientes.controls['telefono'].touched}">
+                            <label class="col-sm-3 control-label">Teléfono</label>
+                            <div class="col-sm-9">
+                                <input type="number" placeholder="Ingrese un teléfono" class="form-control" [formControl]="frmClientes.controls['telefono']">
+                                <div class="alert alert-danger" *ngIf="!frmClientes.controls['telefono'].valid && frmClientes.controls['telefono'].touched">Debe introducir un teléfono.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button #btnClose class="btn btn-default" type="button" (click)="myModal.close(); frmClientes.reset();">Cancelar</button>
+                        <button class="btn btn-primary" type="submit" *ngIf="frmClientes.controls['idCliente'].value == null" [disabled]="!frmClientes.valid">Agregar Cliente</button>
+                        <button class="btn btn-warning" type="submit" *ngIf="frmClientes.controls['idCliente'].value != null" [disabled]="!frmClientes.valid">Actualizar Cliente</button>
+                    </div>
+                </form>
+                <!--===================================================-->
+                <!--End Horizontal Form-->
+            </div>
+        </div>
+
+    </modal-content>
+</modal>
